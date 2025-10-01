@@ -39,6 +39,20 @@
   align-items: start;
 }
 
+.about-left {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.about-right {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 550px;
+  padding-top: 0;
+}
+
 .about-text p {
   font-size: clamp(1rem, 2vw, 1.1rem);
   line-height: 1.8;
@@ -83,17 +97,30 @@
   border-color: rgba(255, 255, 255, 0.3);
 }
 
+@media (max-width: 968px) {
+  .about-content {
+    grid-template-columns: 1fr;
+  }
+  
+  .about-right {
+    min-height: 450px;
+  }
+}
+
 @media (max-width: 768px) {
   .about {
     padding: 60px 16px;
   }
   
   .about-content {
-    grid-template-columns: 1fr;
     gap: 32px;
   }
   
   .skills-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .about-right {
+    min-height: 400px;
   }
 }

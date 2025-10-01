@@ -9,7 +9,7 @@ export default function Projects() {
       description: "Full-stack e-commerce dengan fitur keranjang belanja, payment gateway, dan admin dashboard.",
       tech: ["React", "Node.js", "MongoDB"],
       github: "https://github.com/Rizzx-Lab",
-      demo: "https://demo.com"
+      demo: "https://portfolio-fariz-khaki.vercel.app/#projects"
     },
     {
       id: 2,
