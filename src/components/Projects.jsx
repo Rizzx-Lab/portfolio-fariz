@@ -5,10 +5,10 @@ export default function Projects() {
   const projects = [
     {
       id: 1,
-      title: "E-Commerce Website",
+      title: "Portofolio",
       description: "Full-stack e-commerce dengan fitur keranjang belanja, payment gateway, dan admin dashboard.",
-      tech: ["React", "Node.js", "MongoDB"],
-      github: "https://github.com/Rizzx-Lab",
+      tech: ["React", "Node.js"],
+      github: "https://github.com/Rizzx-Lab/portfolio-fariz",
       demo: "https://portfolio-fariz-khaki.vercel.app/#projects"
     },
     {
