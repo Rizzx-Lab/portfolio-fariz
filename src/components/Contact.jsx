@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Send } from 'lucide-react';
+import { Send, CheckCircle, AlertCircle } from 'lucide-react';
+import emailjs from '@emailjs/browser';
 import './Contact.css';
 
 export default function Contact() {
@@ -8,11 +9,53 @@ export default function Contact() {
     email: '',
     message: ''
   });
+  const [isLoading, setIsLoading] = useState(false);
+  const [status, setStatus] = useState({ type: '', message: '' });
 
-  const handleSubmit = (e) => {
+  const SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+  const TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+  const PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert('Pesan terkirim! (Ini demo, belum terintegrasi dengan backend)');
-    setFormData({ name: '', email: '', message: '' });
+    setIsLoading(true);
+    setStatus({ type: '', message: '' });
+
+    try {
+      const result = await emailjs.send(
+        SERVICE_ID,
+        TEMPLATE_ID,
+        {
+          from_name: formData.name,
+          from_email: formData.email,
+          message: formData.message,
+        },
+        PUBLIC_KEY
+      );
+
+      console.log('✅ Email sent successfully:', result);
+      
+      setStatus({
+        type: 'success',
+        message: 'Pesan berhasil terkirim! Saya akan segera membalas.'
+      });
+
+      setFormData({ name: '', email: '', message: '' });
+
+      setTimeout(() => {
+        setStatus({ type: '', message: '' });
+      }, 5000);
+
+    } catch (error) {
+      console.error('❌ Failed to send email:', error);
+      
+      setStatus({
+        type: 'error',
+        message: 'Gagal mengirim pesan. Silakan coba lagi atau hubungi via email langsung.'
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleChange = (e) => {
@@ -41,6 +84,17 @@ export default function Contact() {
           </div>
 
           <form onSubmit={handleSubmit} className="contact-form">
+            {status.message && (
+              <div className={`status-message ${status.type}`}>
+                {status.type === 'success' ? (
+                  <CheckCircle size={20} />
+                ) : (
+                  <AlertCircle size={20} />
+                )}
+                <span>{status.message}</span>
+              </div>
+            )}
+
             <div className="form-group">
               <label>Name</label>
               <input
@@ -50,6 +104,7 @@ export default function Contact() {
                 value={formData.name}
                 onChange={handleChange}
                 placeholder="Your name"
+                disabled={isLoading}
               />
             </div>
 
@@ -62,6 +117,7 @@ export default function Contact() {
                 value={formData.email}
                 onChange={handleChange}
                 placeholder="your@email.com"
+                disabled={isLoading}
               />
             </div>
 
@@ -74,11 +130,13 @@ export default function Contact() {
                 value={formData.message}
                 onChange={handleChange}
                 placeholder="Your message..."
+                disabled={isLoading}
               />
             </div>
 
-            <button type="submit" className="submit-btn">
-              <Send size={20} /> Send Message
+            <button type="submit" className="submit-btn" disabled={isLoading}>
+              <Send size={20} /> 
+              {isLoading ? 'Sending...' : 'Send Message'}
             </button>
           </form>
         </div>
