@@ -1,17 +1,47 @@
+/* src/App.css */
+.App {
+  position: relative;
+  min-height: 100vh;
+}
+
+/* Scroll Progress Bar */
+.progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+  transform-origin: 0%;
+  z-index: 9999;
+}
+
+/* Footer */
 .footer {
-  background: #1f2937;
+  background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
   color: white;
   text-align: center;
-  padding: 32px 20px;
+  padding: 40px 20px;
+  margin-top: 80px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .footer p {
-  margin: 0;
-  font-size: clamp(0.85rem, 2vw, 1rem);
+  margin: 8px 0;
+  font-size: 14px;
+  color: #9ca3af;
 }
 
-@media (max-width: 480px) {
+.footer-sub {
+  font-size: 12px !important;
+  color: #6b7280 !important;
+  margin-top: 12px !important;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
   .footer {
-    padding: 24px 16px;
+    padding: 32px 16px;
+    margin-top: 60px;
   }
 }
