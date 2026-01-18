@@ -8,7 +8,7 @@ export default function Hero() {
         <h1 className="hero-title">
           Hi, I'm <span className="hero-name">Muhammad Fariz Setiawan</span>
         </h1>
-        <p className="hero-subtitle">Full Stack Developer | React Enthusiast</p>
+        <p className="hero-subtitle"> WEB Developer | Backend Enthusiast</p>
         
         <div className="hero-social">
           <a href="https://github.com/Rizzx-Lab" target="_blank" rel="noopener noreferrer" className="social-btn">
