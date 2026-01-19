@@ -30,14 +30,14 @@ export default function About() {
 
   const education = [
     {
-      year: '2022 - Present',
+      year: '2024 - Present',
       title: 'Software Engineering Student',
       institution: 'SMK RPL',
       description: 'Specializing in web development and software architecture',
       icon: <BookOpen size={20} />
     },
     {
-      year: '2023',
+      year: '2025',
       title: 'Full Stack Bootcamp',
       institution: 'Online Certification',
       description: 'Intensive training in modern web technologies',

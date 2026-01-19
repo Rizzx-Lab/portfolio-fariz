@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { ExternalLink, Github, Eye, Code, Filter, Sparkles } from 'lucide-react'
+import { ExternalLink, Github, Eye, Code, Filter, Sparkles, Clock } from 'lucide-react'
 import { useState } from 'react'
 import '../styles/components/projects.css'
 
@@ -15,66 +15,35 @@ export default function Projects() {
       github: "https://github.com/Rizzx-Lab/portfolio-fariz",
       demo: "https://portfolio-fariz-khaki.vercel.app/",
       category: "web",
-      featured: true,
-      image: "/api/placeholder/400/250"
+      featured: true
     },
     {
       id: 2,
-      title: "E-Commerce Platform",
-      description: "Full-stack e-commerce with shopping cart, payment gateway integration, and admin dashboard for product management.",
-      tech: ["React", "Node.js", "Express", "MongoDB", "Stripe"],
-      github: "https://github.com/Rizzx-Lab",
-      demo: "https://demo.com",
+      title: "Library Management System",
+      description: "Full Stack Web-based library management system built with PHP and MySQL, implementing CRUD operations, relational database design, borrowing and return modules, and responsive front-end using HTML, CSS, and JavaScript.",
+      tech: ["PHP", "HTML", "CSS", "JavaScript", "MySQL"],
+      github: "https://github.com/Rizzx-Lab/sistem-perpustakaan",
+      demo: "https://sistem-perpustakaan-production-2655.up.railway.app/",
       category: "fullstack",
       featured: true
     },
     {
       id: 3,
-      title: "Task Management App",
-      description: "Productivity application with drag & drop interface, real-time updates, and local storage for offline access.",
-      tech: ["React", "TypeScript", "Tailwind CSS", "Local Storage"],
-      github: "https://github.com/Rizzx-Lab",
-      demo: "https://demo.com",
-      category: "web",
-      featured: false
-    },
-    {
-      id: 4,
       title: "Weather Dashboard",
-      description: "Real-time weather application with location detection, forecast charts, and multiple theme options.",
-      tech: ["JavaScript", "Weather API", "Chart.js", "CSS3"],
-      github: "https://github.com/Rizzx-Lab",
-      demo: "https://demo.com",
+      description: "Interactive weather dashboard with real-time data from OpenWeather API. Features 5-day forecast, current weather conditions, interactive Leaflet map visualization, city search functionality, and responsive design with modern UI components.",
+      tech: ["React", "Vite", "Axios", "Leaflet", "OpenWeather API", "CSS3"],
+      github: "https://github.com/Rizzx-Lab/weather-dashboard",
+      demo: "https://weather-dashboard-chi-ashy.vercel.app/",
       category: "web",
-      featured: false
-    },
-    {
-      id: 5,
-      title: "REST API Service",
-      description: "Backend API with authentication, rate limiting, and database integration. Includes comprehensive documentation.",
-      tech: ["Node.js", "Express", "JWT", "MongoDB", "Swagger"],
-      github: "https://github.com/Rizzx-Lab",
-      demo: "https://demo.com",
-      category: "backend",
       featured: true
-    },
-    {
-      id: 6,
-      title: "UI Component Library",
-      description: "Custom React component library with Storybook documentation, TypeScript support, and theme customization.",
-      tech: ["React", "TypeScript", "Storybook", "Styled Components"],
-      github: "https://github.com/Rizzx-Lab",
-      demo: "https://demo.com",
-      category: "web",
-      featured: false
     }
   ]
 
   const filters = [
-    { id: 'all', label: 'All Projects' },
-    { id: 'web', label: 'Web Apps' },
-    { id: 'backend', label: 'Backend' },
-    { id: 'fullstack', label: 'Full Stack' }
+    { id: 'all', label: 'All Projects', count: projects.length },
+    { id: 'web', label: 'Web Apps', count: projects.filter(p => p.category === 'web').length },
+    { id: 'fullstack', label: 'Full Stack', count: projects.filter(p => p.category === 'fullstack').length },
+    { id: 'backend', label: 'Backend', count: projects.filter(p => p.category === 'backend').length }
   ]
 
   const filteredProjects = filter === 'all' 
@@ -234,6 +203,7 @@ export default function Projects() {
                 whileTap={{ scale: 0.95 }}
               >
                 {filterItem.label}
+                <span className="filter-count">({filterItem.count})</span>
                 {filter === filterItem.id && (
                   <motion.div
                     layoutId="filter-indicator"
@@ -246,73 +216,93 @@ export default function Projects() {
         </motion.div>
 
         {/* All Projects Grid */}
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          className="projects-grid"
-        >
-          {filteredProjects.map((project) => (
-            <motion.div
-              key={project.id}
-              variants={itemVariants}
-              className="project-card"
-              whileHover={{ y: -8 }}
-            >
-              <div className="project-header">
-                <div className="project-icon">
-                  <Code size={24} />
-                </div>
-                <h3 className="project-title">{project.title}</h3>
-              </div>
-              
-              <p className="project-description">{project.description}</p>
-              
-              <div className="project-tech">
-                {project.tech.map((tech, index) => (
-                  <span key={index} className="tech-tag">
-                    {tech}
-                  </span>
-                ))}
-              </div>
-
-              <div className="project-links">
-                <motion.a
-                  href={project.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="project-link"
-                  whileHover={{ x: 5 }}
-                >
-                  <Github size={18} /> 
-                  <span>View Code</span>
-                </motion.a>
-                <motion.a
-                  href={project.demo}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="project-link"
-                  whileHover={{ x: 5 }}
-                >
-                  <Eye size={18} /> 
-                  <span>Preview</span>
-                </motion.a>
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
-
-        {/* Empty State */}
-        {filteredProjects.length === 0 && (
+        {filteredProjects.length > 0 ? (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            className="projects-grid"
+          >
+            {filteredProjects.map((project) => (
+              <motion.div
+                key={project.id}
+                variants={itemVariants}
+                className="project-card"
+                whileHover={{ y: -8 }}
+              >
+                <div className="project-header">
+                  <div className="project-icon">
+                    <Code size={24} />
+                  </div>
+                  <h3 className="project-title">{project.title}</h3>
+                </div>
+                
+                <p className="project-description">{project.description}</p>
+                
+                <div className="project-tech">
+                  {project.tech.map((tech, index) => (
+                    <span key={index} className="tech-tag">
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+
+                <div className="project-links">
+                  <motion.a
+                    href={project.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="project-link"
+                    whileHover={{ x: 5 }}
+                  >
+                    <Github size={18} /> 
+                    <span>View Code</span>
+                  </motion.a>
+                  <motion.a
+                    href={project.demo}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="project-link"
+                    whileHover={{ x: 5 }}
+                  >
+                    <Eye size={18} /> 
+                    <span>Preview</span>
+                  </motion.a>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+        ) : (
+          /* Coming Soon State */
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5 }}
             className="empty-state"
           >
-            <Code size={48} />
-            <h3>No projects found</h3>
-            <p>Try selecting a different filter</p>
+            <motion.div
+              animate={{ 
+                rotate: 360,
+                transition: { 
+                  duration: 20, 
+                  repeat: Infinity, 
+                  ease: "linear" 
+                }
+              }}
+            >
+              <Clock size={48} />
+            </motion.div>
+            <h3>Coming Soon</h3>
+            <p>More exciting projects are on the way!</p>
+            <motion.button
+              onClick={() => setFilter('all')}
+              className="back-button"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              View All Projects
+            </motion.button>
           </motion.div>
         )}
       </div>
