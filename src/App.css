@@ -6,6 +6,17 @@
 .App {
   position: relative;
   min-height: 100vh;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Fix for main content */
+.App > * {
+  width: 100%;
+  max-width: 100%;
 }
 
 /* Scroll Progress Bar */
@@ -18,6 +29,12 @@
   background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
   transform-origin: 0%;
   z-index: 9999;
+  width: 100%;
+}
+
+/* Section spacing fixes */
+.App > section {
+  flex-shrink: 0;
 }
 
 /* Footer */
@@ -26,8 +43,17 @@
   color: white;
   text-align: center;
   padding: 40px 20px;
-  margin-top: 80px;
+  margin-top: auto;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
+  width: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
 }
 
 .footer p {
@@ -42,14 +68,15 @@
   margin-top: 12px !important;
 }
 
-/* Responsive */
+/* ========== RESPONSIVE FIXES ========== */
+/* Tablet */
 @media (max-width: 768px) {
   .footer {
     padding: 32px 16px;
-    margin-top: 60px;
   }
 }
 
+/* Mobile */
 @media (max-width: 640px) {
   .progress-bar {
     height: 3px;
@@ -57,7 +84,7 @@
   
   .footer {
     padding: 28px 12px;
-    margin-top: 50px;
+    margin-top: 40px;
   }
   
   .footer p {
@@ -70,10 +97,11 @@
   }
 }
 
+/* Small Mobile */
 @media (max-width: 380px) {
   .footer {
     padding: 24px 10px;
-    margin-top: 40px;
+    margin-top: 30px;
   }
   
   .footer p {
@@ -83,4 +111,18 @@
   .footer-sub {
     font-size: 10px !important;
   }
+}
+
+/* Fix for empty space at bottom */
+.App::after {
+  content: '';
+  display: block;
+  height: 1px;
+  visibility: hidden;
+}
+
+/* Ensure no horizontal scroll */
+html, body, .App, #root {
+  overflow-x: hidden;
+  max-width: 100%;
 }

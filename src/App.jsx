@@ -32,6 +32,7 @@ function App() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.2 }}
+        className="container"
       >
         <About />
       </motion.div>
@@ -40,6 +41,7 @@ function App() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.4 }}
+        className="container"
       >
         <Projects />
       </motion.div>
@@ -48,13 +50,16 @@ function App() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.6 }}
+        className="container"
       >
         <Contact />
       </motion.div>
       
       <footer className="footer">
-        <p>&copy; {new Date().getFullYear()} Muhammad Fariz Setiawan. All rights reserved.</p>
-        <p className="footer-sub">Built with React & Vite • Deployed on Vercel</p>
+        <div className="container">
+          <p>&copy; {new Date().getFullYear()} Muhammad Fariz Setiawan. All rights reserved.</p>
+          <p className="footer-sub">Built with React & Vite • Deployed on Vercel</p>
+        </div>
       </footer>
     </div>
   )
