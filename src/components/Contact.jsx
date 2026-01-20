@@ -1,63 +1,22 @@
+import { motion } from 'framer-motion'
+import { Mail, MapPin, Phone, Send, CheckCircle, AlertCircle } from 'lucide-react'
 import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { Send, CheckCircle, AlertCircle, Mail, Phone, MapPin, Loader2 } from 'lucide-react'
-import emailjs from '@emailjs/browser'
-import '../styles/components/contact.css';
+import '../styles/components/contact.css'
 
 export default function Contact() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    subject: '',
     message: ''
   })
-  const [isLoading, setIsLoading] = useState(false)
-  const [status, setStatus] = useState({ type: '', message: '' })
-
-  const SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID
-  const TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID
-  const PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY
-
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    setIsLoading(true)
-    setStatus({ type: '', message: '' })
-
-    try {
-      const result = await emailjs.send(
-        SERVICE_ID,
-        TEMPLATE_ID,
-        {
-          from_name: formData.name,
-          from_email: formData.email,
-          message: formData.message,
-        },
-        PUBLIC_KEY
-      )
-
-      console.log('✅ Email sent successfully:', result)
-      
-      setStatus({
-        type: 'success',
-        message: 'Message sent successfully! I will get back to you soon.'
-      })
-
-      setFormData({ name: '', email: '', message: '' })
-
-      setTimeout(() => {
-        setStatus({ type: '', message: '' })
-      }, 5000)
-
-    } catch (error) {
-      console.error('❌ Failed to send email:', error)
-      
-      setStatus({
-        type: 'error',
-        message: 'Failed to send message. Please try again or contact me directly via email.'
-      })
-    } finally {
-      setIsLoading(false)
-    }
-  }
+  
+  const [status, setStatus] = useState({
+    type: '', // 'success' or 'error'
+    message: ''
+  })
+  
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const handleChange = (e) => {
     setFormData({
@@ -66,31 +25,28 @@ export default function Contact() {
     })
   }
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.2
-      }
-    }
-  }
-
-  const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: {
-        type: "spring",
-        stiffness: 100
-      }
-    }
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    setIsSubmitting(true)
+    
+    // Simulate API call
+    setTimeout(() => {
+      setStatus({
+        type: 'success',
+        message: 'Your message has been sent successfully! I\'ll get back to you soon.'
+      })
+      setFormData({ name: '', email: '', subject: '', message: '' })
+      setIsSubmitting(false)
+      
+      // Clear status message after 5 seconds
+      setTimeout(() => {
+        setStatus({ type: '', message: '' })
+      }, 5000)
+    }, 1500)
   }
 
   return (
-    <section id="contact" className="contact">
+    <section data-section="contact" className="contact">
       <div className="container">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -102,37 +58,34 @@ export default function Contact() {
             Get In <span className="text-gradient">Touch</span>
           </h2>
           <p className="section-subtitle">
-            Have a project in mind or just want to chat? Feel free to reach out!
+            Have a project in mind or want to discuss opportunities? Feel free to reach out!
           </p>
         </motion.div>
 
         <div className="contact-content">
-          {/* Contact Info */}
+          {/* Left Side - Contact Info */}
           <motion.div
             className="contact-info"
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
           >
-            <motion.div variants={itemVariants} className="info-card">
-              <h3>Let's Work Together! 🚀</h3>
+            <div className="info-card">
+              <h3>Let's Connect</h3>
               <p className="info-description">
-                I'm always open to discussing new opportunities, whether it's freelance work, 
-                collaboration, or just a friendly chat about technology and development.
+                I'm always open to discussing new projects, creative ideas, or opportunities to be part of your vision.
               </p>
-            </motion.div>
+            </div>
 
-            <motion.div variants={itemVariants} className="contact-details">
+            <div className="contact-details">
               <div className="contact-item">
                 <div className="contact-icon">
                   <Mail size={20} />
                 </div>
                 <div className="contact-text">
                   <h4>Email</h4>
-                  <a href="mailto:muhammadfarizsetiawan1604@gmail.com">
-                    muhammadfarizsetiawan1604@gmail.com
-                  </a>
+                  <a href="mailto:fariz@example.com">fariz@example.com</a>
                 </div>
               </div>
 
@@ -152,113 +105,114 @@ export default function Contact() {
                 </div>
                 <div className="contact-text">
                   <h4>Availability</h4>
-                  <p>Open for opportunities</p>
+                  <p>Open for freelance & full-time roles</p>
                 </div>
               </div>
-            </motion.div>
+            </div>
 
-            <motion.div variants={itemVariants} className="contact-note">
+            <div className="contact-note">
               <p>
-                <strong>Response Time:</strong> I typically reply within 24 hours.
+                <strong>Response Time:</strong> I typically respond within 24 hours.
               </p>
               <p>
-                <strong>Looking for:</strong> Internships, freelance projects, and collaborative opportunities.
+                Whether it's a quick question or a detailed project discussion, I'm here to help!
               </p>
-            </motion.div>
+            </div>
           </motion.div>
 
-          {/* Contact Form */}
+          {/* Right Side - Contact Form */}
           <motion.div
+            className="contact-form-wrapper"
             initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 0.6 }}
             viewport={{ once: true }}
-            className="contact-form-wrapper"
           >
-            <form onSubmit={handleSubmit} className="contact-form">
-              <AnimatePresence mode="wait">
-                {status.message && (
-                  <motion.div
-                    initial={{ opacity: 0, y: -20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                    className={`status-message ${status.type}`}
-                  >
-                    <div className="status-icon">
-                      {status.type === 'success' ? (
-                        <CheckCircle size={24} />
-                      ) : (
-                        <AlertCircle size={24} />
-                      )}
-                    </div>
-                    <div className="status-content">
-                      <strong>
-                        {status.type === 'success' ? 'Success!' : 'Error!'}
-                      </strong>
-                      <p>{status.message}</p>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+            <form className="contact-form" onSubmit={handleSubmit}>
+              {status.type && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className={`status-message ${status.type}`}
+                >
+                  <div className="status-icon">
+                    {status.type === 'success' ? <CheckCircle size={24} /> : <AlertCircle size={24} />}
+                  </div>
+                  <div className="status-content">
+                    <strong>{status.type === 'success' ? 'Success!' : 'Error!'}</strong>
+                    <p>{status.message}</p>
+                  </div>
+                </motion.div>
+              )}
 
               <div className="form-group">
-                <label htmlFor="name">
-                  Full Name <span className="required">*</span>
-                </label>
+                <label htmlFor="name">Full Name <span className="required">*</span></label>
                 <input
                   type="text"
                   id="name"
                   name="name"
-                  required
                   value={formData.name}
                   onChange={handleChange}
                   placeholder="John Doe"
-                  disabled={isLoading}
+                  required
                 />
               </div>
 
               <div className="form-group">
-                <label htmlFor="email">
-                  Email Address <span className="required">*</span>
-                </label>
+                <label htmlFor="email">Email Address <span className="required">*</span></label>
                 <input
                   type="email"
                   id="email"
                   name="email"
-                  required
                   value={formData.email}
                   onChange={handleChange}
                   placeholder="john@example.com"
-                  disabled={isLoading}
+                  required
                 />
               </div>
 
               <div className="form-group">
-                <label htmlFor="message">
-                  Your Message <span className="required">*</span>
-                </label>
+                <label htmlFor="subject">Subject <span className="required">*</span></label>
+                <input
+                  type="text"
+                  id="subject"
+                  name="subject"
+                  value={formData.subject}
+                  onChange={handleChange}
+                  placeholder="Project Inquiry"
+                  required
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="message">Your Message <span className="required">*</span></label>
                 <textarea
                   id="message"
                   name="message"
-                  required
-                  rows="6"
                   value={formData.message}
                   onChange={handleChange}
                   placeholder="Hi Fariz, I'd like to discuss a project..."
-                  disabled={isLoading}
+                  rows="5"
+                  required
                 />
               </div>
 
               <motion.button
                 type="submit"
                 className="submit-btn"
-                disabled={isLoading}
-                whileHover={!isLoading ? { scale: 1.02 } : {}}
-                whileTap={!isLoading ? { scale: 0.98 } : {}}
+                disabled={isSubmitting}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
               >
-                {isLoading ? (
+                {isSubmitting ? (
                   <>
-                    <Loader2 className="animate-spin" size={20} />
+                    <motion.span
+                      animate={{ rotate: 360 }}
+                      transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                      className="animate-spin"
+                    >
+                      <Send size={20} />
+                    </motion.span>
                     Sending...
                   </>
                 ) : (

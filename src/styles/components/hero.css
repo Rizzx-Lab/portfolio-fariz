@@ -59,7 +59,7 @@
   height: 100%;
 }
 
-/* FIXED: Hero content width issues */
+/* Hero Content */
 .hero-content {
   position: relative;
   z-index: 2;
@@ -176,6 +176,7 @@
   font-weight: 600;
 }
 
+/* ========== SOCIAL MEDIA LINKS - FIXED ========== */
 .hero-social {
   display: flex;
   justify-content: center;
@@ -204,6 +205,12 @@
   flex-shrink: 0;
 }
 
+.social-link:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-3px);
+  color: #ffffff;
+}
+
 .social-link::before {
   content: '';
   position: absolute;
@@ -219,7 +226,34 @@
   left: 100%;
 }
 
-/* FIXED: Hero actions layout */
+.social-link svg {
+  width: 24px;
+  height: 24px;
+  z-index: 1;
+}
+
+.social-link .tooltip {
+  position: absolute;
+  top: -40px;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  opacity: 0;
+  visibility: hidden;
+  transition: 0.3s;
+  white-space: nowrap;
+  z-index: 10;
+}
+
+.social-link:hover .tooltip {
+  opacity: 1;
+  visibility: visible;
+  top: -45px;
+}
+
+/* Hero Actions */
 .hero-actions {
   display: flex;
   gap: 20px;
@@ -293,6 +327,27 @@
   color: #667eea;
 }
 
+/* Animations */
+@keyframes glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(102, 126, 234, 0.3); }
+  50% { box-shadow: 0 0 40px rgba(102, 126, 234, 0.6); }
+}
+
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes typing {
+  0%, 60%, 100% { transform: translateY(0); opacity: 0.3; }
+  30% { transform: translateY(-10px); opacity: 1; }
+}
+
+@keyframes underlinePulse {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+}
+
 /* ========== RESPONSIVE FIXES ========== */
 /* Tablet */
 @media (max-width: 768px) {
@@ -332,6 +387,16 @@
   
   .stat {
     min-width: 80px;
+  }
+  
+  .social-link {
+    width: 48px;
+    height: 48px;
+  }
+  
+  .social-link svg {
+    width: 20px;
+    height: 20px;
   }
 }
 
@@ -468,6 +533,16 @@
   
   .stat-label {
     font-size: 10px;
+  }
+  
+  .social-link {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .social-link svg {
+    width: 16px;
+    height: 16px;
   }
 }
 

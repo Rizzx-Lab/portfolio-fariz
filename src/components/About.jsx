@@ -14,7 +14,7 @@ import {
   Award,
   BookOpen
 } from 'lucide-react'
-import '../styles/components/about.css';
+import '../styles/components/about.css'
 
 export default function About() {
   const skills = [
@@ -69,7 +69,7 @@ export default function About() {
   }
 
   return (
-    <section id="about" className="about">
+    <section data-section="about" className="about">
       <div className="container">
         <motion.h2 
           initial={{ opacity: 0, y: -20 }}

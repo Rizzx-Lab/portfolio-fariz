@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X, Moon, Sun, Home, User, Briefcase, Mail } from 'lucide-react'
-import '../styles/components/navbar.css';
+import '../styles/components/navbar.css'
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
@@ -22,20 +21,33 @@ export default function Navbar() {
     document.documentElement.classList.toggle('dark', !darkMode)
   }
 
-  const scrollToSection = (e, sectionId) => {
-    e.preventDefault()
-    const element = document.querySelector(sectionId)
-    if (element) {
-      const navbarHeight = 80
-      const elementPosition = element.getBoundingClientRect().top
-      const offsetPosition = elementPosition + window.pageYOffset - navbarHeight
-
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: 'smooth'
-      })
-    }
-    setIsOpen(false)
+  // FUNGSI SCROLL YANG DIOPTIMALKAN
+  const handleNavClick = (sectionId) => {
+    setIsOpen(false) // Tutup mobile menu
+    
+    setTimeout(() => {
+      // Cari element dengan data-section
+      const element = document.querySelector(`[data-section="${sectionId}"]`)
+      
+      if (element) {
+        const navbarHeight = 80
+        const elementPosition = element.getBoundingClientRect().top + window.pageYOffset - navbarHeight
+        
+        window.scrollTo({
+          top: elementPosition,
+          behavior: 'smooth'
+        })
+      } else {
+        console.warn(`Section '${sectionId}' tidak ditemukan`)
+        // Fallback ke top untuk home
+        if (sectionId === 'home') {
+          window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+          })
+        }
+      }
+    }, 100)
   }
 
   const navItems = [
@@ -45,119 +57,85 @@ export default function Navbar() {
     { id: 'contact', label: 'Contact', icon: <Mail size={18} /> }
   ]
 
-  const mobileMenuVariants = {
-    hidden: { opacity: 0, y: -20 },
-    visible: { 
-      opacity: 1, 
-      y: 0,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.2
-      }
-    }
-  }
-
-  const mobileItemVariants = {
-    hidden: { opacity: 0, x: -20 },
-    visible: { opacity: 1, x: 0 }
-  }
-
   return (
-    <>
-      <nav className={`navbar ${scrolled ? 'scrolled' : ''} ${darkMode ? 'dark' : ''}`}>
-        <div className="navbar-container">
-          <div className="navbar-content">
-            {/* Logo */}
-            <motion.a 
-              href="#home"
-              className="navbar-logo"
-              onClick={(e) => scrollToSection(e, '#home')}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+    <nav className={`navbar ${scrolled ? 'scrolled' : ''} ${darkMode ? 'dark' : ''}`}>
+      <div className="navbar-container">
+        <div className="navbar-content">
+          {/* Logo */}
+          <a 
+            href="#"
+            className="navbar-logo"
+            onClick={(e) => {
+              e.preventDefault()
+              handleNavClick('home')
+            }}
+          >
+            <span className="logo-text">Fariz</span>
+            <span className="logo-dot">.</span>
+          </a>
+
+          {/* Desktop Menu */}
+          <div className="navbar-menu">
+            {navItems.map((item) => (
+              <a
+                key={item.id}
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault()
+                  handleNavClick(item.id)
+                }}
+                className="nav-link"
+              >
+                <span className="nav-icon">{item.icon}</span>
+                <span className="nav-text">{item.label}</span>
+              </a>
+            ))}
+          </div>
+
+          {/* Right Side */}
+          <div className="navbar-actions">
+            {/* Dark Mode Toggle */}
+            <button
+              onClick={toggleDarkMode}
+              className="theme-toggle"
+              aria-label="Toggle theme"
             >
-              <span className="logo-text">Fariz</span>
-              <span className="logo-dot">.</span>
-            </motion.a>
+              {darkMode ? <Sun size={20} /> : <Moon size={20} />}
+            </button>
 
-            {/* Desktop Menu */}
-            <div className="navbar-menu">
-              {navItems.map((item) => (
-                <motion.a
-                  key={item.id}
-                  href={`#${item.id}`}
-                  onClick={(e) => scrollToSection(e, `#${item.id}`)}
-                  className="nav-link"
-                  whileHover={{ y: -2 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  <span className="nav-icon">{item.icon}</span>
-                  <span className="nav-text">{item.label}</span>
-                </motion.a>
-              ))}
-            </div>
-
-            {/* Right Side */}
-            <div className="navbar-actions">
-              {/* Dark Mode Toggle */}
-              <motion.button
-                onClick={toggleDarkMode}
-                className="theme-toggle"
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-                aria-label="Toggle theme"
-              >
-                {darkMode ? <Sun size={20} /> : <Moon size={20} />}
-              </motion.button>
-
-              {/* Mobile Menu Toggle */}
-              <motion.button
-                className="navbar-toggle"
-                onClick={() => setIsOpen(!isOpen)}
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-                aria-label="Toggle menu"
-              >
-                {isOpen ? <X size={24} /> : <Menu size={24} />}
-              </motion.button>
-            </div>
+            {/* Mobile Menu Toggle */}
+            <button
+              className="navbar-toggle"
+              onClick={() => setIsOpen(!isOpen)}
+              aria-label="Toggle menu"
+            >
+              {isOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
           </div>
         </div>
+      </div>
 
-        {/* Mobile Menu */}
-        <AnimatePresence>
-          {isOpen && (
-            <motion.div
-              className="navbar-mobile"
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.3 }}
-            >
-              <motion.div
-                className="mobile-menu"
-                variants={mobileMenuVariants}
-                initial="hidden"
-                animate="visible"
+      {/* Mobile Menu */}
+      {isOpen && (
+        <div className="navbar-mobile">
+          <div className="mobile-menu">
+            {navItems.map((item) => (
+              <a
+                key={item.id}
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault()
+                  handleNavClick(item.id)
+                }}
+                className="mobile-link"
               >
-                {navItems.map((item) => (
-                  <motion.a
-                    key={item.id}
-                    href={`#${item.id}`}
-                    onClick={(e) => scrollToSection(e, `#${item.id}`)}
-                    className="mobile-link"
-                    variants={mobileItemVariants}
-                    whileHover={{ x: 10 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    <span className="mobile-icon">{item.icon}</span>
-                    <span className="mobile-text">{item.label}</span>
-                  </motion.a>
-                ))}
-              </motion.div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </nav>
-    </>
+                <span className="mobile-icon">{item.icon}</span>
+                <span className="mobile-text">{item.label}</span>
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
+    </nav>
   )
 }

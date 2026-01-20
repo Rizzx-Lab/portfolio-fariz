@@ -96,7 +96,7 @@ export default function Projects() {
   }
 
   return (
-    <section id="projects" className="projects">
+    <section data-section="projects" className="projects">
       <div className="container">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
