@@ -68,3 +68,60 @@ body {
   opacity: 1;
   transform: translateY(0);
 }
+
+/* Mobile Optimizations */
+@media (max-width: 640px) {
+  /* Faster animations untuk mobile */
+  .scroll-reveal {
+    transform: translateY(30px);
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+  }
+  
+  .scroll-reveal-stagger > * {
+    transform: translateY(20px);
+    transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+  }
+  
+  .scroll-reveal-stagger.reveal-visible > *:nth-child(1) {
+    transition-delay: 0.05s;
+  }
+  
+  .scroll-reveal-stagger.reveal-visible > *:nth-child(2) {
+    transition-delay: 0.1s;
+  }
+  
+  .scroll-reveal-stagger.reveal-visible > *:nth-child(3) {
+    transition-delay: 0.15s;
+  }
+  
+  .scroll-reveal-stagger.reveal-visible > *:nth-child(4) {
+    transition-delay: 0.2s;
+  }
+}
+
+@media (max-width: 380px) {
+  /* Minimal animations untuk performa */
+  .scroll-reveal {
+    transform: translateY(20px);
+    transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+  }
+  
+  .scroll-reveal-stagger > * {
+    transform: translateY(15px);
+    transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+  }
+}
+
+/* Accessibility: Reduce motion */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  
+  .scroll-reveal,
+  .scroll-reveal-stagger > * {
+    transition: none;
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

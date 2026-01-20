@@ -325,3 +325,50 @@
     margin-left: auto;
   }
 }
+@media (max-width: 640px) {
+  .about {
+    padding: 50px 12px;
+  }
+  
+  .about-content {
+    gap: 32px;
+  }
+  
+  .about-image-wrapper {
+    max-width: 280px;
+    margin: 0 auto;
+  }
+  
+  .about-text p {
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+  
+  .skills-grid {
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+  }
+  
+  .skill-item {
+    padding: 16px 12px;
+  }
+  
+  .skill-icon {
+    width: 36px;
+    height: 36px;
+  }
+  
+  .skill-name {
+    font-size: 0.9rem;
+  }
+  
+  .skill-level {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .skills-grid {
+    grid-template-columns: 1fr;
+  }
+}
