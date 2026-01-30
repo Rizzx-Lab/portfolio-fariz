@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { ExternalLink, Github, Eye, Code, Filter, Sparkles, Clock } from 'lucide-react'
+import { ExternalLink, Github, Eye, Code, Filter, Sparkles, Clock, Download } from 'lucide-react'
 import { useState } from 'react'
 import '../styles/components/projects.css'
 
@@ -36,6 +36,17 @@ export default function Projects() {
       demo: "https://weather-dashboard-chi-ashy.vercel.app/",
       category: "web",
       featured: true
+    },
+    {
+      id: 4,
+      title: "Weather Dashboard Mobile",
+      description: "Android weather application built with Flutter and OpenWeather API. Features real-time weather data, 5-day forecast, city search, automatic location detection, and modern Material Design UI with smooth animations.",
+      tech: ["Flutter", "Dart", "Provider", "OpenWeather API", "Geolocator"],
+      github: "https://github.com/Rizzx-Lab/weather-dashboard-flutter",
+      demo: "https://github.com/Rizzx-Lab/weather-dashboard-flutter/releases/download/v1.0.0/app-release.apk",
+      category: "mobile",
+      featured: true,
+      isMobile: true
     }
   ]
 
@@ -43,6 +54,7 @@ export default function Projects() {
     { id: 'all', label: 'All Projects', count: projects.length },
     { id: 'web', label: 'Web Apps', count: projects.filter(p => p.category === 'web').length },
     { id: 'fullstack', label: 'Full Stack', count: projects.filter(p => p.category === 'fullstack').length },
+    { id: 'mobile', label: 'Mobile', count: projects.filter(p => p.category === 'mobile').length },
     { id: 'backend', label: 'Backend', count: projects.filter(p => p.category === 'backend').length }
   ]
 
@@ -171,8 +183,8 @@ export default function Projects() {
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                       >
-                        <ExternalLink size={18} /> 
-                        <span>Live Demo</span>
+                        {project.isMobile ? <Download size={18} /> : <ExternalLink size={18} />}
+                        <span>{project.isMobile ? 'Download APK' : 'Live Demo'}</span>
                       </motion.a>
                     </div>
                   </div>
@@ -194,33 +206,36 @@ export default function Projects() {
             <span>Filter by:</span>
           </div>
           <div className="filter-buttons">
-            {filters.map((filterItem) => (
-              <motion.button
-                key={filterItem.id}
-                onClick={() => setFilter(filterItem.id)}
-                className={`filter-btn ${filter === filterItem.id ? 'active' : ''}`}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                {filterItem.label}
-                <span className="filter-count">({filterItem.count})</span>
-                {filter === filterItem.id && (
-                  <motion.div
-                    layoutId="filter-indicator"
-                    className="filter-indicator"
-                  />
-                )}
-              </motion.button>
-            ))}
+            {filters
+              .filter(filterItem => filterItem.id === 'all' || filterItem.count > 0)
+              .map((filterItem) => (
+                <motion.button
+                  key={filterItem.id}
+                  onClick={() => setFilter(filterItem.id)}
+                  className={`filter-btn ${filter === filterItem.id ? 'active' : ''}`}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  {filterItem.label}
+                  <span className="filter-count">({filterItem.count})</span>
+                  {filter === filterItem.id && (
+                    <motion.div
+                      layoutId="filter-indicator"
+                      className="filter-indicator"
+                    />
+                  )}
+                </motion.button>
+              ))}
           </div>
         </motion.div>
 
         {/* All Projects Grid */}
         {filteredProjects.length > 0 ? (
           <motion.div
+            key={filter}
             variants={containerVariants}
             initial="hidden"
-            whileInView="visible"
+            animate="visible"
             viewport={{ once: true, margin: "-100px" }}
             className="projects-grid"
           >
@@ -266,8 +281,8 @@ export default function Projects() {
                     className="project-link"
                     whileHover={{ x: 5 }}
                   >
-                    <Eye size={18} /> 
-                    <span>Preview</span>
+                    {project.isMobile ? <Download size={18} /> : <Eye size={18} />}
+                    <span>{project.isMobile ? 'Download' : 'Preview'}</span>
                   </motion.a>
                 </div>
               </motion.div>

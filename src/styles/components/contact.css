@@ -1,4 +1,4 @@
-/* src/components/Contact.css */
+/* src/styles/components/contact.css */
 .contact {
   padding: var(--section-padding);
   background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
@@ -6,6 +6,11 @@
   overflow: hidden;
   width: 100%;
   max-width: 100%;
+  transition: background 0.3s ease;
+}
+
+html.dark .contact {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
 }
 
 .contact::before {
@@ -41,9 +46,9 @@
   line-height: 1.7;
   margin-top: 16px;
   width: 100%;
+  transition: color 0.3s ease;
 }
 
-/* FIXED: Grid layout issues */
 .contact-content {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -68,6 +73,7 @@
   box-shadow: var(--shadow-md);
   border: 1px solid var(--border-color);
   width: 100%;
+  transition: all 0.3s ease;
 }
 
 .info-card h3 {
@@ -75,6 +81,7 @@
   color: var(--text-dark);
   margin-bottom: 16px;
   font-weight: 700;
+  transition: color 0.3s ease;
 }
 
 .info-description {
@@ -82,6 +89,7 @@
   line-height: 1.7;
   font-size: clamp(0.95rem, 1.5vw, 1.1rem);
   width: 100%;
+  transition: color 0.3s ease;
 }
 
 .contact-details {
@@ -94,6 +102,7 @@
   flex-direction: column;
   gap: 28px;
   width: 100%;
+  transition: all 0.3s ease;
 }
 
 .contact-item {
@@ -121,6 +130,7 @@
   font-weight: 600;
   color: var(--text-dark);
   margin-bottom: 6px;
+  transition: color 0.3s ease;
 }
 
 .contact-text a,
@@ -142,6 +152,11 @@
   padding: 24px;
   border-left: 4px solid var(--primary);
   width: 100%;
+  transition: background 0.3s ease;
+}
+
+html.dark .contact-note {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
 }
 
 .contact-note p {
@@ -149,11 +164,13 @@
   margin-bottom: 8px;
   line-height: 1.6;
   font-size: 0.95rem;
+  transition: color 0.3s ease;
 }
 
 .contact-note strong {
   color: var(--text-dark);
   font-weight: 600;
+  transition: color 0.3s ease;
 }
 
 /* Contact Form */
@@ -172,6 +189,7 @@
   position: relative;
   overflow: hidden;
   width: 100%;
+  transition: all 0.3s ease;
 }
 
 .contact-form::before {
@@ -230,12 +248,15 @@
   display: block;
   font-size: clamp(0.95rem, 1.5vw, 1.1rem);
   margin-bottom: 4px;
+  color: var(--text-dark);
+  transition: color 0.3s ease;
 }
 
 .status-content p {
   color: var(--text-gray);
   font-size: 0.95rem;
   line-height: 1.6;
+  transition: color 0.3s ease;
 }
 
 /* Form Elements */
@@ -250,6 +271,7 @@
   font-weight: 600;
   color: var(--text-dark);
   font-size: clamp(0.95rem, 1.5vw, 1rem);
+  transition: color 0.3s ease;
 }
 
 .required {
@@ -332,8 +354,7 @@
   to { transform: rotate(360deg); }
 }
 
-/* ========== RESPONSIVE FIXES ========== */
-/* Tablet */
+/* ========== RESPONSIVE ========== */
 @media (max-width: 1024px) {
   .contact-content {
     gap: 40px;
@@ -344,7 +365,6 @@
   }
 }
 
-/* Mobile (Tablet) */
 @media (max-width: 768px) {
   .contact {
     padding: var(--mobile-padding);
@@ -372,7 +392,6 @@
   }
 }
 
-/* Mobile */
 @media (max-width: 640px) {
   .contact {
     padding: 50px 12px;
@@ -492,7 +511,6 @@
   }
 }
 
-/* Small Mobile */
 @media (max-width: 480px) {
   .contact {
     padding: 40px 10px;

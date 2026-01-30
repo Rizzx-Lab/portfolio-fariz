@@ -6,6 +6,11 @@
   overflow: hidden;
   width: 100%;
   max-width: 100%;
+  transition: background 0.3s ease;
+}
+
+html.dark .about {
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
 }
 
 .about::before {
@@ -28,13 +33,15 @@
   padding: 0 20px;
 }
 
-/* FIXED: Grid layout issues */
+/* FIXED: Grid 2 kolom dengan max-width yang lebih sempit */
 .about-content {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 48px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: clamp(32px, 4vw, 48px);
   align-items: start;
   width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
 }
 
 .about-left {
@@ -42,12 +49,16 @@
   flex-direction: column;
   gap: 32px;
   width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
 }
 
 .about-right {
   position: sticky;
   top: 100px;
   width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
 }
 
 /* Cards */
@@ -95,6 +106,7 @@
   font-size: clamp(1.3rem, 3vw, 1.5rem);
   font-weight: 700;
   color: var(--text-dark);
+  transition: color 0.3s ease;
 }
 
 .card-header svg {
@@ -115,11 +127,13 @@
   line-height: 1.7;
   color: var(--text-gray);
   width: 100%;
+  transition: color 0.3s ease;
 }
 
 .about-text strong {
   color: var(--text-dark);
   font-weight: 600;
+  transition: color 0.3s ease;
 }
 
 /* Education Card */
@@ -179,6 +193,11 @@
   font-size: 0.9rem;
   font-weight: 600;
   margin-bottom: 8px;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+html.dark .timeline-year {
+  background: rgba(102, 126, 234, 0.2);
 }
 
 .timeline-content h4 {
@@ -186,6 +205,7 @@
   font-weight: 700;
   color: var(--text-dark);
   margin-bottom: 4px;
+  transition: color 0.3s ease;
 }
 
 .institution {
@@ -199,6 +219,7 @@
   color: var(--text-gray);
   line-height: 1.6;
   font-size: 0.95rem;
+  transition: color 0.3s ease;
 }
 
 /* Skills Card */
@@ -209,6 +230,7 @@
   box-shadow: var(--shadow-lg);
   border: 1px solid var(--border-color);
   width: 100%;
+  transition: all 0.3s ease;
 }
 
 .skills-container {
@@ -225,6 +247,7 @@
   padding: 20px;
   border: 1px solid var(--border-color);
   width: 100%;
+  transition: all 0.3s ease;
 }
 
 .skill-header {
@@ -246,6 +269,11 @@
   border-radius: 10px;
   box-shadow: var(--shadow-sm);
   flex-shrink: 0;
+  transition: background 0.3s ease;
+}
+
+html.dark .skill-icon {
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .skill-name {
@@ -253,6 +281,7 @@
   font-weight: 600;
   color: var(--text-dark);
   min-width: 120px;
+  transition: color 0.3s ease;
 }
 
 .skill-percent {
@@ -268,6 +297,11 @@
   background: rgba(0, 0, 0, 0.05);
   border-radius: var(--radius-full);
   overflow: hidden;
+  transition: background 0.3s ease;
+}
+
+html.dark .skill-bar {
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .skill-progress {
@@ -297,20 +331,33 @@
   border-radius: var(--radius-md);
   border-left: 4px solid var(--primary);
   width: 100%;
+  transition: background 0.3s ease;
+}
+
+html.dark .skills-summary {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
 }
 
 .skills-summary p {
   color: var(--text-gray);
   line-height: 1.7;
   font-size: 0.95rem;
+  transition: color 0.3s ease;
 }
 
 .skills-summary strong {
   color: var(--primary);
 }
 
-/* ========== RESPONSIVE FIXES ========== */
-/* Tablet */
+/* ========== RESPONSIVE - JANGAN DIUBAH ========== */
+/* Large Desktop - untuk layar sangat lebar */
+@media (min-width: 1400px) {
+  .about-content {
+    max-width: 1100px;
+    gap: 48px;
+  }
+}
+
 @media (max-width: 1024px) {
   .about-content {
     gap: 32px;
@@ -321,7 +368,6 @@
   }
 }
 
-/* Mobile (Tablet) */
 @media (max-width: 768px) {
   .about {
     padding: var(--mobile-padding);
@@ -330,6 +376,11 @@
   .about-content {
     grid-template-columns: 1fr;
     gap: 32px;
+  }
+  
+  .about-left,
+  .about-right {
+    max-width: 100%;
   }
   
   .about-card {
@@ -347,7 +398,6 @@
   }
 }
 
-/* Mobile */
 @media (max-width: 640px) {
   .about {
     padding: 50px 12px;
@@ -445,7 +495,6 @@
   }
 }
 
-/* Small Mobile */
 @media (max-width: 480px) {
   .about {
     padding: 40px 10px;

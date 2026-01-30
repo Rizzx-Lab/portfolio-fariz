@@ -373,3 +373,63 @@
     padding: 10px 12px;
   }
 }
+/* src/App.css */
+.App {
+  min-height: 100vh;
+  background-color: var(--bg-white);
+  transition: background-color 0.3s ease;
+}
+
+/* Progress Bar */
+.progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--primary-gradient);
+  transform-origin: 0%;
+  z-index: 9999;
+}
+
+/* Footer */
+.footer {
+  background-color: var(--bg-light);
+  padding: 40px 20px;
+  text-align: center;
+  margin-top: 80px;
+  border-top: 1px solid var(--border-color);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.footer p {
+  color: var(--text-gray);
+  margin: 8px 0;
+  transition: color 0.3s ease;
+}
+
+.footer-sub {
+  font-size: 14px;
+  color: var(--text-light);
+}
+
+/* Dark mode footer */
+html.dark .footer {
+  background-color: var(--bg-light);
+  border-top-color: var(--border-color);
+}
+
+@media (max-width: 640px) {
+  .footer {
+    padding: 30px 16px;
+    margin-top: 60px;
+  }
+  
+  .footer p {
+    font-size: 14px;
+  }
+  
+  .footer-sub {
+    font-size: 12px;
+  }
+}

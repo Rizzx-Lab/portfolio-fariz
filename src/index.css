@@ -1,5 +1,7 @@
+/* ========== BASE STYLES ========== */
 html {
   scroll-behavior: smooth;
+  transition: background-color 0.3s ease;
 }
 
 * {
@@ -11,13 +13,21 @@ html {
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   line-height: 1.6;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 #root {
   min-height: 100vh;
+  background-color: var(--bg-white);
+  transition: background-color 0.3s ease;
 }
 
-/* Scroll Reveal Animation */
+/* Dark mode root */
+html.dark #root {
+  background-color: var(--bg-white);
+}
+
+/* ========== SCROLL REVEAL ANIMATIONS ========== */
 .scroll-reveal {
   opacity: 0;
   transform: translateY(50px);
@@ -69,6 +79,7 @@ body {
   transform: translateY(0);
 }
 
+/* ========== RESPONSIVE ANIMATIONS ========== */
 /* Mobile Optimizations */
 @media (max-width: 640px) {
   /* Faster animations untuk mobile */
@@ -112,7 +123,8 @@ body {
   }
 }
 
-/* Accessibility: Reduce motion */
+/* ========== ACCESSIBILITY ========== */
+/* Reduce motion */
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -120,8 +132,28 @@ body {
   
   .scroll-reveal,
   .scroll-reveal-stagger > * {
-    transition: none;
-    opacity: 1;
-    transform: translateY(0);
+    transition: none !important;
+    opacity: 1 !important;
+    transform: translateY(0) !important;
   }
+}
+
+/* ========== DARK MODE SUPPORT ========== */
+/* Additional dark mode styles if needed */
+html.dark body {
+  background-color: var(--bg-white);
+  color: var(--text-dark);
+}
+
+/* Smooth transitions for theme changes */
+* {
+  transition-property: background-color, color, border-color;
+  transition-duration: 0.3s;
+  transition-timing-function: ease;
+}
+
+/* Exclude animations from transition */
+.scroll-reveal,
+.scroll-reveal * {
+  transition-property: opacity, transform, background-color, color, border-color !important;
 }

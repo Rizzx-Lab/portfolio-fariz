@@ -5,7 +5,10 @@ import '../styles/components/navbar.css'
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
-  const [darkMode, setDarkMode] = useState(false)
+  const [darkMode, setDarkMode] = useState(() => {
+    const saved = localStorage.getItem('darkMode')
+    return saved ? JSON.parse(saved) : false
+  })
 
   useEffect(() => {
     const handleScroll = () => {
@@ -16,17 +19,30 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add('dark')
+    } else {
+      document.documentElement.classList.remove('dark')
+    }
+  }, [darkMode])
+
   const toggleDarkMode = () => {
-    setDarkMode(!darkMode)
-    document.documentElement.classList.toggle('dark', !darkMode)
+    const newDarkMode = !darkMode
+    setDarkMode(newDarkMode)
+    localStorage.setItem('darkMode', JSON.stringify(newDarkMode))
+    
+    if (newDarkMode) {
+      document.documentElement.classList.add('dark')
+    } else {
+      document.documentElement.classList.remove('dark')
+    }
   }
 
-  // FUNGSI SCROLL YANG DIOPTIMALKAN
   const handleNavClick = (sectionId) => {
-    setIsOpen(false) // Tutup mobile menu
+    setIsOpen(false)
     
     setTimeout(() => {
-      // Cari element dengan data-section
       const element = document.querySelector(`[data-section="${sectionId}"]`)
       
       if (element) {
@@ -38,8 +54,6 @@ export default function Navbar() {
           behavior: 'smooth'
         })
       } else {
-        console.warn(`Section '${sectionId}' tidak ditemukan`)
-        // Fallback ke top untuk home
         if (sectionId === 'home') {
           window.scrollTo({
             top: 0,
@@ -51,19 +65,18 @@ export default function Navbar() {
   }
 
   const navItems = [
-    { id: 'home', label: 'Home', icon: <Home size={18} /> },
-    { id: 'about', label: 'About', icon: <User size={18} /> },
-    { id: 'projects', label: 'Projects', icon: <Briefcase size={18} /> },
-    { id: 'contact', label: 'Contact', icon: <Mail size={18} /> }
+    { id: 'home', label: 'Home', icon: Home },
+    { id: 'about', label: 'About', icon: User },
+    { id: 'projects', label: 'Projects', icon: Briefcase },
+    { id: 'contact', label: 'Contact', icon: Mail }
   ]
 
   return (
     <nav className={`navbar ${scrolled ? 'scrolled' : ''} ${darkMode ? 'dark' : ''}`}>
       <div className="navbar-container">
         <div className="navbar-content">
-          {/* Logo */}
           <a 
-            href="#"
+            href="#home"
             className="navbar-logo"
             onClick={(e) => {
               e.preventDefault()
@@ -74,27 +87,29 @@ export default function Navbar() {
             <span className="logo-dot">.</span>
           </a>
 
-          {/* Desktop Menu */}
           <div className="navbar-menu">
-            {navItems.map((item) => (
-              <a
-                key={item.id}
-                href="#"
-                onClick={(e) => {
-                  e.preventDefault()
-                  handleNavClick(item.id)
-                }}
-                className="nav-link"
-              >
-                <span className="nav-icon">{item.icon}</span>
-                <span className="nav-text">{item.label}</span>
-              </a>
-            ))}
+            {navItems.map((item) => {
+              const Icon = item.icon
+              return (
+                <a
+                  key={item.id}
+                  href={`#${item.id}`}
+                  onClick={(e) => {
+                    e.preventDefault()
+                    handleNavClick(item.id)
+                  }}
+                  className="nav-link"
+                >
+                  <span className="nav-icon">
+                    <Icon size={18} />
+                  </span>
+                  <span className="nav-text">{item.label}</span>
+                </a>
+              )
+            })}
           </div>
 
-          {/* Right Side */}
           <div className="navbar-actions">
-            {/* Dark Mode Toggle */}
             <button
               onClick={toggleDarkMode}
               className="theme-toggle"
@@ -103,7 +118,6 @@ export default function Navbar() {
               {darkMode ? <Sun size={20} /> : <Moon size={20} />}
             </button>
 
-            {/* Mobile Menu Toggle */}
             <button
               className="navbar-toggle"
               onClick={() => setIsOpen(!isOpen)}
@@ -115,24 +129,28 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Mobile Menu */}
       {isOpen && (
         <div className="navbar-mobile">
           <div className="mobile-menu">
-            {navItems.map((item) => (
-              <a
-                key={item.id}
-                href="#"
-                onClick={(e) => {
-                  e.preventDefault()
-                  handleNavClick(item.id)
-                }}
-                className="mobile-link"
-              >
-                <span className="mobile-icon">{item.icon}</span>
-                <span className="mobile-text">{item.label}</span>
-              </a>
-            ))}
+            {navItems.map((item) => {
+              const Icon = item.icon
+              return (
+                <a
+                  key={item.id}
+                  href={`#${item.id}`}
+                  onClick={(e) => {
+                    e.preventDefault()
+                    handleNavClick(item.id)
+                  }}
+                  className="mobile-link"
+                >
+                  <span className="mobile-icon">
+                    <Icon size={24} />
+                  </span>
+                  <span className="mobile-text">{item.label}</span>
+                </a>
+              )
+            })}
           </div>
         </div>
       )}

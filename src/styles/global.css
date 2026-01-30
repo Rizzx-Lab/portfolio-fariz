@@ -1,6 +1,6 @@
 /* src/styles/global.css */
 :root {
-  /* Color Palette */
+  /* Color Palette - LIGHT MODE */
   --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
   --dark-gradient: linear-gradient(135deg, #1f2937 0%, #111827 100%);
@@ -39,6 +39,24 @@
   --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
+/* ========== DARK MODE VARIABLES ========== */
+html.dark {
+  /* Dark Mode Colors */
+  --text-dark: #f9fafb;
+  --text-gray: #d1d5db;
+  --text-light: #9ca3af;
+  --bg-white: #0f172a;
+  --bg-light: #1e293b;
+  --bg-gray: #334155;
+  --border-color: #475569;
+  
+  /* Dark Shadows */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.6);
+  --shadow-primary: 0 8px 25px rgba(102, 126, 234, 0.4);
+}
+
 /* ========== CRITICAL FIXES ========== */
 /* Reset & Base Styles */
 * {
@@ -56,6 +74,7 @@ html, body {
 
 html {
   scroll-behavior: smooth;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 body {
@@ -66,6 +85,13 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Dark mode body */
+html.dark body {
+  color: var(--text-dark);
+  background-color: var(--bg-white);
 }
 
 /* ========== CONTAINER FIXES ========== */
@@ -82,6 +108,8 @@ section {
   width: 100%;
   max-width: 100%;
   position: relative;
+  background-color: var(--bg-white);
+  transition: background-color 0.3s ease;
 }
 
 /* Section Title */
@@ -95,6 +123,7 @@ section {
   display: inline-block;
   width: 100%;
   padding-bottom: 20px;
+  transition: color 0.3s ease;
 }
 
 .section-title::after {
