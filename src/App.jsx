@@ -32,7 +32,6 @@ function App() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.2 }}
-        className="container"
       >
         <About />
       </motion.div>
@@ -41,7 +40,6 @@ function App() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.4 }}
-        className="container"
       >
         <Projects />
       </motion.div>
@@ -50,7 +48,6 @@ function App() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.6 }}
-        className="container"
       >
         <Contact />
       </motion.div>

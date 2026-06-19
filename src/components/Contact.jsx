@@ -85,7 +85,7 @@ export default function Contact() {
                 </div>
                 <div className="contact-text">
                   <h4>Email</h4>
-                  <a href="mailto:fariz@example.com">fariz@example.com</a>
+                  <a href="mailto:muhammadfarizsetiawan1604@gmail.com">muhammadfarizsetiawan1604@gmail.com</a>
                 </div>
               </div>
 
@@ -105,7 +105,7 @@ export default function Contact() {
                 </div>
                 <div className="contact-text">
                   <h4>Availability</h4>
-                  <p>Open for freelance & full-time roles</p>
+                  <p>+62 881-0270-99361</p>
                 </div>
               </div>
             </div>

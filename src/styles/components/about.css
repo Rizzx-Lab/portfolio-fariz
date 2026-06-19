@@ -1,7 +1,7 @@
 /* src/styles/components/about.css */
 .about {
   padding: var(--section-padding);
-  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  background: linear-gradient(180deg, #f1f5f9 0%, #f8fafc 100%);
   position: relative;
   overflow: hidden;
   width: 100%;
@@ -10,7 +10,7 @@
 }
 
 html.dark .about {
-  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
 }
 
 .about::before {
