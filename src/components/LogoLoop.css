@@ -1,0 +1,98 @@
+/* ============================================================
+   LogoLoop — Infinite horizontal marquee animation
+   ============================================================ */
+
+.logoloop-wrapper {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.logoloop-track {
+  display: flex;
+  overflow: hidden;
+  user-select: none;
+}
+
+.logoloop-track.logoloop-scale .logoloop-item:hover {
+  transform: scale(1.1);
+}
+
+/* ── Inner strip (the moving part) ── */
+.logoloop-inner {
+  display: flex;
+  align-items: center;
+  gap: var(--logo-gap, 48px);
+  animation: logoloop-scroll var(--logo-speed, 20000ms) linear infinite;
+  animation-direction: var(--logo-direction, normal);
+  width: max-content;
+}
+
+/* ── Individual logo item ── */
+.logoloop-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: var(--logo-height, 40px);
+  flex-shrink: 0;
+  color: var(--text-dim);
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.logoloop-item:hover {
+  color: var(--text-secondary);
+}
+
+.logoloop-item svg,
+.logoloop-item img {
+  height: var(--logo-height, 40px);
+  width: auto;
+  display: block;
+}
+
+/* ── Tech name label below icon ── */
+.logoloop-label {
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--text-dim);
+  text-align: center;
+  white-space: nowrap;
+  line-height: 1;
+  transition: color 0.3s ease;
+}
+
+.logoloop-item:hover .logoloop-label {
+  color: var(--text-secondary);
+}
+
+/* ── Keyframe animation ── */
+@keyframes logoloop-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* ── Fade edges ── */
+.logoloop-fade {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 80px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.logoloop-fade-left {
+  left: 0;
+  background: linear-gradient(to right, var(--fade-color, #0a0f1a), transparent);
+}
+
+.logoloop-fade-right {
+  right: 0;
+  background: linear-gradient(to left, var(--fade-color, #0a0f1a), transparent);
+}

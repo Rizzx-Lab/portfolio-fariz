@@ -1,7 +1,8 @@
-import { Suspense, lazy } from 'react'
+import { Suspense, lazy, useState, useEffect } from 'react'
 import { motion, useScroll, useSpring } from 'framer-motion'
-import Navbar from './components/Navbar'
 import Hero from './components/Hero'
+import PillNav from './components/PillNav'
+import ArcRevealHero from './components/ArcRevealHero'
 import { useScrollReveal } from './hooks/useScrollReveal'
 import './App.css'
 
@@ -9,9 +10,19 @@ import './App.css'
 const About = lazy(() => import('./components/About'))
 const Projects = lazy(() => import('./components/Projects'))
 const Contact = lazy(() => import('./components/Contact'))
+const Skills = lazy(() => import('./components/Skills'))
+
+const INTRO_GREETINGS = [
+  { text: 'Ready?' },
+  { text: 'Get.' },
+  { text: 'Set.' },
+  { text: 'Go!' },
+]
 
 function App() {
   useScrollReveal()
+
+  const [activeHref, setActiveHref] = useState('#home')
 
   const { scrollYProgress } = useScroll()
   const scaleX = useSpring(scrollYProgress, {
@@ -20,37 +31,81 @@ function App() {
     restDelta: 0.001
   })
 
+  // Track active section using IntersectionObserver
+  useEffect(() => {
+    const sections = ['home', 'skills', 'about', 'projects', 'contact']
+    const observers = sections.map(id => {
+      const el = document.getElementById(id)
+      if (!el) return null
+      const observer = new IntersectionObserver(
+        ([entry]) => { if (entry.isIntersecting) setActiveHref(`#${id}`) },
+        { threshold: 0.5 }
+      )
+      observer.observe(el)
+      return observer
+    })
+    return () => observers.forEach(obs => obs?.disconnect())
+  }, [])
+
   return (
-    <div className="App">
-      {/* Scroll Progress Bar */}
-      <motion.div
-        className="scroll-progress"
-        style={{ scaleX }}
-      />
+    <ArcRevealHero
+      greetings={INTRO_GREETINGS}
+      greetingHold={1200}
+      revealDuration={2000}
+      storageKey="fariz-portfolio-intro"
+      introClassName="bg-[#0f172a]"
+      greetingClassName="text-white"
+    >
+      <div className="App">
+        {/* Scroll Progress Bar */}
+        <motion.div
+          className="scroll-progress"
+          style={{ scaleX }}
+        />
 
-      <Navbar />
-      <main className="main-content">
-        <Hero />
-        <Suspense fallback={null}>
-          <About />
-          <Projects />
-          <Contact />
-        </Suspense>
-      </main>
+        <PillNav
+          logo="/images/fz.png"
+          logoAlt="Fariz Logo"
+          items={[
+            { label: 'Home', href: '#home' },
+            { label: 'Skills', href: '#skills' },
+            { label: 'About', href: '#about' },
+            { label: 'Projects', href: '#projects' },
+            { label: 'Contact', href: '#contact' },
+          ]}
+          activeHref={activeHref}
+          ease="power2.easeOut"
+          baseColor="#0f172a"
+          pillColor="#1e293b"
+          pillTextColor="#ffffff"
+          hoveredPillTextColor="#0f172a"
+          initialLoadAnimation={false}
+        />
 
-      <footer className="footer">
-        <div className="footer-content">
-          <p className="footer-text">
-            &copy; {new Date().getFullYear()} Muhammad Fariz Setiawan
-          </p>
-          <div className="footer-links">
-            <a href="https://github.com/Rizzx-Lab" className="footer-link" target="_blank" rel="noopener noreferrer">GitHub</a>
-            <a href="https://www.linkedin.com/in/muhammad-fariz-setiawan-a176aa387/" className="footer-link" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-            <a href="mailto:muhammadfarizsetiawan1604@gmail.com" className="footer-link">Email</a>
+        <main className="main-content">
+          <Hero />
+          <Suspense fallback={null}>
+            <Skills />
+            <About />
+            <Projects />
+            <Contact />
+          </Suspense>
+        </main>
+
+        <footer className="footer">
+          <div className="footer-content">
+            <p className="footer-text">
+              &copy; {new Date().getFullYear()} Muhammad Fariz Setiawan
+            </p>
+            <div className="footer-links">
+              <a href="https://github.com/Rizzx-Lab" className="footer-link" target="_blank" rel="noopener noreferrer">GitHub</a>
+              <a href="https://www.linkedin.com/in/muhammad-fariz-setiawan-a176aa387/" className="footer-link" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+              <a href="mailto:muhammadfarizsetiawan1604@gmail.com" className="footer-link">Email</a>
+            </div>
           </div>
-        </div>
-      </footer>
-    </div>
+        </footer>
+      </div>
+    </ArcRevealHero>
   )
 }
 
