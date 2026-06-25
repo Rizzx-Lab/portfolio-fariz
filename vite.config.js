@@ -12,7 +12,7 @@ export default defineConfig({
     target: 'esnext',
 
     // CSS code splitting
-    cssCodeSplit: true,
+    cssCodeSplit: false,
 
     // Rollup options
     rollupOptions: {
@@ -43,6 +43,9 @@ export default defineConfig({
           const ext = info[info.length - 1]
           if (/\.(png|jpe?g|svg|gif|webp|ico)$/.test(assetInfo.name)) {
             return `assets/images/[name]-[hash][ext]`
+          }
+          if (/\.css$/.test(assetInfo.name)) {
+            return `assets/css/[name]-[hash][ext]`
           }
           return `assets/[name]-[hash][ext]`
         },
