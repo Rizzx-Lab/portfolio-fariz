@@ -45,7 +45,7 @@ export default defineConfig({
             return `assets/images/[name]-[hash][ext]`
           }
           if (/\.css$/.test(assetInfo.name)) {
-            return `assets/css/[name]-[hash][ext]`
+            return `assets/css/[name]-[hash].[ext]`
           }
           return `assets/[name]-[hash][ext]`
         },
