@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import './ArcRevealHero.css'
 
@@ -11,19 +11,37 @@ export default function ArcRevealHero({
   introClassName = '',
   greetingClassName = '',
 }) {
-  // phase: 'idle' | 'intro' | 'reveal' | 'done'
+  // phase: 'idle' | 'intro' | 'reveal' | 'done' | 'error'
   const [phase, setPhase] = useState('idle')
   const [greetingIndex, setGreetingIndex] = useState(0)
+  const [hasError, setHasError] = useState(false)
+
+  // Safety fallback — force show content if animation takes too long
+  const forceComplete = useCallback(() => {
+    setPhase('done')
+  }, [])
 
   // Start intro on mount if not already seen
   useEffect(() => {
-    const hasSeen = sessionStorage.getItem(storageKey)
-    if (!hasSeen) {
-      setPhase('intro')
-    } else {
+    try {
+      const hasSeen = sessionStorage.getItem(storageKey)
+      if (!hasSeen) {
+        setPhase('intro')
+      } else {
+        setPhase('done')
+      }
+    } catch (e) {
+      // sessionStorage might be blocked (private browsing, etc.)
+      console.warn('ArcRevealHero: sessionStorage error, skipping intro', e)
       setPhase('done')
     }
   }, [storageKey])
+
+  // Safety timeout — if animation runs for more than 15 seconds, force complete
+  useEffect(() => {
+    const safetyTimer = setTimeout(forceComplete, 15000)
+    return () => clearTimeout(safetyTimer)
+  }, [forceComplete])
 
   // Greeting cycle — only runs during 'intro' phase
   useEffect(() => {
@@ -32,29 +50,42 @@ export default function ArcRevealHero({
     const isLast = greetingIndex >= greetings.length - 1
 
     const timer = setTimeout(() => {
-      if (isLast) {
-        setPhase('reveal')
-      } else {
-        setGreetingIndex(i => i + 1)
+      try {
+        if (isLast) {
+          setPhase('reveal')
+        } else {
+          setGreetingIndex(i => i + 1)
+        }
+      } catch (e) {
+        console.warn('ArcRevealHero: greeting timer error', e)
+        forceComplete()
       }
     }, greetingHold)
 
     return () => clearTimeout(timer)
-  }, [phase, greetingIndex, greetings.length, greetingHold])
+  }, [phase, greetingIndex, greetings.length, greetingHold, forceComplete])
 
   // After reveal animation finishes, mark done
   useEffect(() => {
     if (phase !== 'reveal') return
 
     const timer = setTimeout(() => {
-      sessionStorage.setItem(storageKey, 'true')
-      setPhase('done')
+      try {
+        sessionStorage.setItem(storageKey, 'true')
+        setPhase('done')
+      } catch (e) {
+        console.warn('ArcRevealHero: sessionStorage write error', e)
+        setPhase('done')
+      }
     }, revealDuration)
 
     return () => clearTimeout(timer)
   }, [phase, revealDuration, storageKey])
 
-  if (phase === 'done') return <>{children}</>
+  // Error fallback or normal done
+  if (phase === 'done' || phase === 'error' || hasError) {
+    return <>{children}</>
+  }
 
   return (
     <div className="arc-reveal-wrapper">
