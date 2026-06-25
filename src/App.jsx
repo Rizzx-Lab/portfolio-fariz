@@ -5,7 +5,7 @@ import PillNav from './components/PillNav'
 import Dock from './components/Dock'
 import ArcRevealHero from './components/ArcRevealHero'
 import { useScrollReveal } from './hooks/useScrollReveal'
-import { VscHome, VscArchive, VscAccount, VscSettingsGear } from 'react-icons/vsc'
+import { VscHome, VscTools, VscPerson, VscBriefcase, VscMail } from 'react-icons/vsc'
 import './App.css'
 
 // Lazy-load sections below the fold
@@ -109,11 +109,13 @@ function App() {
 
         <div className="mobile-dock">
           <Dock
+            activeHref={activeHref}
             items={[
-              { icon: <VscHome size={18} />, label: 'Home', onClick: () => { document.getElementById('home')?.scrollIntoView({ behavior: 'smooth' }); } },
-              { icon: <VscArchive size={18} />, label: 'Projects', onClick: () => { document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' }); } },
-              { icon: <VscAccount size={18} />, label: 'About', onClick: () => { document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' }); } },
-              { icon: <VscSettingsGear size={18} />, label: 'Contact', onClick: () => { document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' }); } },
+              { href: '#home', icon: <VscHome size={18} />, label: 'Home', onClick: () => { document.getElementById('home')?.scrollIntoView({ behavior: 'smooth' }); } },
+              { href: '#skills', icon: <VscTools size={18} />, label: 'Skills', onClick: () => { document.getElementById('skills')?.scrollIntoView({ behavior: 'smooth' }); } },
+              { href: '#about', icon: <VscPerson size={18} />, label: 'About', onClick: () => { document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' }); } },
+              { href: '#projects', icon: <VscBriefcase size={18} />, label: 'Projects', onClick: () => { document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' }); } },
+              { href: '#contact', icon: <VscMail size={18} />, label: 'Contact', onClick: () => { document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' }); } },
             ]}
             panelHeight={68}
             baseItemSize={50}

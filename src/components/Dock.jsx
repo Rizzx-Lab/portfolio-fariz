@@ -3,7 +3,7 @@ import { motion, useMotionValue, useSpring, useTransform, AnimatePresence } from
 import { Children, cloneElement, useEffect, useMemo, useRef, useState } from 'react';
 import './Dock.css';
 
-function DockItem({ children, className = '', onClick, mouseX, spring, distance, magnification, baseItemSize, label }) {
+function DockItem({ children, className = '', onClick, mouseX, spring, distance, magnification, baseItemSize, label, isActive }) {
   const ref = useRef(null);
   const isHovered = useMotionValue(0);
   const mouseDistance = useTransform(mouseX, val => {
@@ -27,48 +27,29 @@ function DockItem({ children, className = '', onClick, mouseX, spring, distance,
       onFocus={() => isHovered.set(1)}
       onBlur={() => isHovered.set(0)}
       onClick={onClick}
-      className={`dock-item ${className}`}
+      className={`dock-item ${className} ${isActive ? 'is-active' : ''}`}
       tabIndex={0}
       role="button"
       aria-haspopup="true"
       aria-label={label}
+      aria-current={isActive ? 'page' : undefined}
       onKeyDown={handleKeyDown}
     >
-      {Children.map(children, child => cloneElement(child, { isHovered }))}
+      {Children.map(children, child => cloneElement(child, { isHovered, isActive }))}
     </motion.div>
   );
 }
 
-function DockLabel({ children, className = '', ...rest }) {
-  const { isHovered } = rest;
-  const [isVisible, setIsVisible] = useState(false);
-  useEffect(() => {
-    const unsubscribe = isHovered.on('change', latest => {
-      setIsVisible(latest === 1);
-    });
-    return () => unsubscribe();
-  }, [isHovered]);
+function DockLabel({ children, className = '', isActive, ...rest }) {
   return (
-    <AnimatePresence>
-      {isVisible && (
-        <motion.div
-          initial={{ opacity: 0, y: 0 }}
-          animate={{ opacity: 1, y: -10 }}
-          exit={{ opacity: 0, y: 0 }}
-          transition={{ duration: 0.2 }}
-          className={`dock-label ${className}`}
-          role="tooltip"
-          style={{ x: '-50%' }}
-        >
-          {children}
-        </motion.div>
-      )}
-    </AnimatePresence>
+    <div className={`dock-label ${isActive ? 'is-active' : ''}`}>
+      {children}
+    </div>
   );
 }
 
-function DockIcon({ children, className = '' }) {
-  return <div className={`dock-icon ${className}`}>{children}</div>;
+function DockIcon({ children, className = '', isActive, ...rest }) {
+  return <div className={`dock-icon ${isActive ? 'is-active' : ''}`}>{children}</div>;
 }
 
 export default function Dock({
@@ -79,7 +60,8 @@ export default function Dock({
   distance = 200,
   panelHeight = 68,
   dockHeight = 256,
-  baseItemSize = 50
+  baseItemSize = 50,
+  activeHref = '#home'
 }) {
   const mouseX = useMotionValue(Infinity);
   const isHovered = useMotionValue(0);
@@ -89,6 +71,7 @@ export default function Dock({
   );
   const heightRow = useTransform(isHovered, [0, 1], [panelHeight, maxHeight]);
   const height = useSpring(heightRow, spring);
+
   return (
     <motion.div style={{ height, scrollbarWidth: 'none' }} className="dock-outer">
       <motion.div
@@ -103,7 +86,7 @@ export default function Dock({
         className={`dock-panel ${className}`}
         style={{ height: panelHeight }}
         role="toolbar"
-        aria-label="Application dock"
+        aria-label="Mobile navigation"
       >
         {items.map((item, index) => (
           <DockItem
@@ -116,9 +99,10 @@ export default function Dock({
             magnification={magnification}
             baseItemSize={baseItemSize}
             label={item.label}
+            isActive={activeHref === item.href}
           >
-            <DockIcon>{item.icon}</DockIcon>
-            <DockLabel>{item.label}</DockLabel>
+            <DockIcon isActive={activeHref === item.href}>{item.icon}</DockIcon>
+            <DockLabel isActive={activeHref === item.href}>{item.label}</DockLabel>
           </DockItem>
         ))}
       </motion.div>
