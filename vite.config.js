@@ -44,7 +44,7 @@ export default defineConfig({
           if (/\.(png|jpe?g|svg|gif|webp|ico)$/.test(assetInfo.name)) {
             return `assets/images/[name]-[hash][ext]`
           }
-          return `assets/[name]-[hash][ext]`
+          return `assets/[name]-[hash].[ext]`
         },
 
         // Chunk file naming
