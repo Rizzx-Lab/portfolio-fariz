@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react'
-import { Menu, X, Sun, Moon, Home, User, Briefcase, Mail } from 'lucide-react'
+import { Sun, Moon, Home, User, Briefcase, Mail } from 'lucide-react'
 import '../styles/components/navbar.css'
 
 export default function Navbar() {
-  const [isOpen, setIsOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [activeSection, setActiveSection] = useState('home')
 
@@ -11,7 +10,6 @@ export default function Navbar() {
     const handleScroll = () => {
       setScrolled(window.scrollY > 30)
 
-      // Update active section based on scroll position
       const sections = ['home', 'about', 'projects', 'contact']
       const scrollPosition = window.scrollY + 200
 
@@ -32,7 +30,6 @@ export default function Navbar() {
   }, [])
 
   const handleNavClick = (sectionId) => {
-    setIsOpen(false)
     const element = document.getElementById(sectionId)
     if (element) {
       const offset = sectionId === 'home' ? 0 : 80
@@ -50,10 +47,9 @@ export default function Navbar() {
 
   return (
     <>
-      {/* Minimal Floating Navigation */}
+      {/* Desktop Navigation */}
       <nav className={`navbar ${scrolled ? 'scrolled' : ''}`}>
         <div className="navbar-inner">
-          {/* Logo */}
           <a
             href="#home"
             className="navbar-logo"
@@ -63,7 +59,6 @@ export default function Navbar() {
             <span className="logo-accent">.</span>
           </a>
 
-          {/* Desktop Navigation */}
           <div className="navbar-menu">
             {navItems.map((item) => (
               <a
@@ -76,39 +71,27 @@ export default function Navbar() {
               </a>
             ))}
           </div>
-
-          {/* Mobile Menu Toggle */}
-          <button
-            className="navbar-toggle"
-            onClick={() => setIsOpen(!isOpen)}
-            aria-label={isOpen ? 'Close menu' : 'Open menu'}
-          >
-            {isOpen ? <X size={20} /> : <Menu size={20} />}
-          </button>
         </div>
       </nav>
 
-      {/* Mobile Menu */}
-      {isOpen && (
-        <div className="mobile-menu-overlay" onClick={() => setIsOpen(false)}>
-          <div className="mobile-menu" onClick={(e) => e.stopPropagation()}>
-            {navItems.map((item) => {
-              const Icon = item.icon
-              return (
-                <a
-                  key={item.id}
-                  href={`#${item.id}`}
-                  onClick={(e) => { e.preventDefault(); handleNavClick(item.id) }}
-                  className={`mobile-link ${activeSection === item.id ? 'active' : ''}`}
-                >
-                  <Icon size={18} />
-                  <span>{item.label}</span>
-                </a>
-              )
-            })}
-          </div>
-        </div>
-      )}
+      {/* Mobile Bottom Navigation */}
+      <nav className="bottom-nav">
+        {navItems.map((item) => {
+          const Icon = item.icon
+          return (
+            <a
+              key={item.id}
+              href={`#${item.id}`}
+              onClick={(e) => { e.preventDefault(); handleNavClick(item.id) }}
+              className={`bottom-nav-item ${activeSection === item.id ? 'active' : ''}`}
+              aria-label={item.label}
+            >
+              <Icon size={20} strokeWidth={1.75} />
+              <span className="bottom-nav-label">{item.label}</span>
+            </a>
+          )
+        })}
+      </nav>
     </>
   )
 }
