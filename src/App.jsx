@@ -109,14 +109,14 @@ function App() {
 
         <div className="mobile-dock">
           <Dock
-            activeHref={activeHref}
             items={[
-              { href: '#home', icon: <VscHome size={18} />, label: 'Home', onClick: () => { document.getElementById('home')?.scrollIntoView({ behavior: 'smooth' }); } },
-              { href: '#skills', icon: <VscTools size={18} />, label: 'Skills', onClick: () => { document.getElementById('skills')?.scrollIntoView({ behavior: 'smooth' }); } },
-              { href: '#about', icon: <VscPerson size={18} />, label: 'About', onClick: () => { document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' }); } },
-              { href: '#projects', icon: <VscBriefcase size={18} />, label: 'Projects', onClick: () => { document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' }); } },
-              { href: '#contact', icon: <VscMail size={18} />, label: 'Contact', onClick: () => { document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' }); } },
+              { href: '#home', label: 'Home', icon: <VscHome size={18} /> },
+              { href: '#skills', label: 'Skills', icon: <VscTools size={18} /> },
+              { href: '#about', label: 'About', icon: <VscPerson size={18} /> },
+              { href: '#projects', label: 'Projects', icon: <VscBriefcase size={18} /> },
+              { href: '#contact', label: 'Contact', icon: <VscMail size={18} /> },
             ]}
+            activeHref={activeHref}
             panelHeight={68}
             baseItemSize={50}
             magnification={70}

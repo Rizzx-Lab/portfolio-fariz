@@ -1,9 +1,20 @@
 'use client';
-import { motion, useMotionValue, useSpring, useTransform, AnimatePresence } from 'motion/react';
-import { Children, cloneElement, useEffect, useMemo, useRef, useState } from 'react';
+import { motion, useMotionValue, useSpring, useTransform } from 'motion/react';
+import { Children, cloneElement, useMemo, useRef } from 'react';
 import './Dock.css';
 
-function DockItem({ children, className = '', onClick, mouseX, spring, distance, magnification, baseItemSize, label, isActive }) {
+function DockItem({
+  children,
+  className = '',
+  onClick,
+  mouseX,
+  spring,
+  distance,
+  magnification,
+  baseItemSize,
+  label,
+  isActive
+}) {
   const ref = useRef(null);
   const isHovered = useMotionValue(0);
   const mouseDistance = useTransform(mouseX, val => {
@@ -12,44 +23,44 @@ function DockItem({ children, className = '', onClick, mouseX, spring, distance,
   });
   const targetSize = useTransform(mouseDistance, [-distance, 0, distance], [baseItemSize, magnification, baseItemSize]);
   const size = useSpring(targetSize, spring);
-  const handleKeyDown = e => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      onClick?.();
-    }
-  };
+
   return (
     <motion.div
       ref={ref}
       style={{ width: size, height: size }}
       onHoverStart={() => isHovered.set(1)}
       onHoverEnd={() => isHovered.set(0)}
-      onFocus={() => isHovered.set(1)}
-      onBlur={() => isHovered.set(0)}
       onClick={onClick}
-      className={`dock-item ${className} ${isActive ? 'is-active' : ''}`}
+      className={`dock-item ${isActive ? 'is-active' : ''} ${className}`}
       tabIndex={0}
       role="button"
-      aria-haspopup="true"
       aria-label={label}
       aria-current={isActive ? 'page' : undefined}
-      onKeyDown={handleKeyDown}
     >
-      {Children.map(children, child => cloneElement(child, { isHovered, isActive }))}
+      {Children.map(children, child =>
+        cloneElement(child, {
+          isHovered,
+          isActive
+        })
+      )}
     </motion.div>
   );
 }
 
-function DockLabel({ children, className = '', isActive, ...rest }) {
+function DockIcon({ children, isActive }) {
   return (
-    <div className={`dock-label ${isActive ? 'is-active' : ''}`}>
+    <div className={`dock-icon ${isActive ? 'is-active' : ''}`}>
       {children}
     </div>
   );
 }
 
-function DockIcon({ children, className = '', isActive, ...rest }) {
-  return <div className={`dock-icon ${isActive ? 'is-active' : ''}`}>{children}</div>;
+function DockLabel({ children, isActive }) {
+  return (
+    <div className={`dock-label ${isActive ? 'is-active' : ''}`}>
+      {children}
+    </div>
+  );
 }
 
 export default function Dock({
@@ -65,12 +76,26 @@ export default function Dock({
 }) {
   const mouseX = useMotionValue(Infinity);
   const isHovered = useMotionValue(0);
+
   const maxHeight = useMemo(
     () => Math.max(dockHeight, magnification + magnification / 2 + 4),
     [magnification, dockHeight]
   );
+
   const heightRow = useTransform(isHovered, [0, 1], [panelHeight, maxHeight]);
   const height = useSpring(heightRow, spring);
+
+  // Compute items with onClick and isActive
+  const computedItems = useMemo(() => {
+    return items.map(item => ({
+      ...item,
+      isActive: activeHref === item.href,
+      onClick: () => {
+        const id = item.href.replace('#', '');
+        document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+      }
+    }));
+  }, [items, activeHref]);
 
   return (
     <motion.div style={{ height, scrollbarWidth: 'none' }} className="dock-outer">
@@ -85,10 +110,10 @@ export default function Dock({
         }}
         className={`dock-panel ${className}`}
         style={{ height: panelHeight }}
-        role="toolbar"
+        role="navigation"
         aria-label="Mobile navigation"
       >
-        {items.map((item, index) => (
+        {computedItems.map((item, index) => (
           <DockItem
             key={index}
             onClick={item.onClick}
@@ -99,10 +124,10 @@ export default function Dock({
             magnification={magnification}
             baseItemSize={baseItemSize}
             label={item.label}
-            isActive={activeHref === item.href}
+            isActive={item.isActive}
           >
-            <DockIcon isActive={activeHref === item.href}>{item.icon}</DockIcon>
-            <DockLabel isActive={activeHref === item.href}>{item.label}</DockLabel>
+            <DockIcon isActive={item.isActive}>{item.icon}</DockIcon>
+            <DockLabel isActive={item.isActive}>{item.label}</DockLabel>
           </DockItem>
         ))}
       </motion.div>
