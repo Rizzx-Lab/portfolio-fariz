@@ -95,7 +95,7 @@ const projects = [
       "Announcement board for community updates and notifications",
       "Search, filter, and export capabilities across all data categories"
     ],
-    techStack: ["PHP", "MySQL", "JavaScript", "CSS3"],
+    techStack: ["Next.js", "TypeScript", "Tailwind CSS", "Laravel", "MySQL", "Framer Motion"],
     links: {
       demo: "https://armaloeluf.my.id/",
       code: "https://github.com/Rizzx-Lab/kartar-rt"

@@ -4,10 +4,10 @@ import '../styles/components/about.css'
 
 export default function About() {
   const skills = [
-    { name: 'Frontend', items: ['React', 'JavaScript', 'HTML/CSS', 'Responsive Design'] },
-    { name: 'Backend', items: ['Node.js', 'Express', 'PHP'] },
-    { name: 'Database', items: ['MySQL', 'MongoDB'] },
-    { name: 'Tools', items: ['Git', 'GitHub', 'Vite', 'Framer Motion'] },
+    { name: 'Frontend', items: ['React', 'Next.js', 'TypeScript', 'Tailwind CSS', 'Vite', 'Laravel Blade'] },
+    { name: 'Backend', items: ['Laravel', 'PHP', 'Node.js', 'Express', 'REST API'] },
+    { name: 'Database', items: ['MySQL', 'MongoDB', 'PostgreSQL'] },
+    { name: 'Tools', items: ['Git', 'GitHub', 'Framer Motion', 'Figma', 'Docker', 'Linux', 'Nginx'] },
   ]
 
   const education = [

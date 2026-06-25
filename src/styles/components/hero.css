@@ -301,6 +301,81 @@
   letter-spacing: 0.05em;
 }
 
+/* ========== ENTRANCE ANIMATIONS ========== */
+
+/* Base state — invisible, shifted down */
+.hero-animate {
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity 0.4s ease-out,
+    transform 0.4s ease-out;
+  transition-delay: var(--delay, 0ms);
+}
+
+/* Triggered by .hero-grid.is-mounted */
+.hero-grid.is-mounted .hero-animate {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Right column slides in from the right instead of down */
+.hero-slide-right {
+  transform: translateX(24px);
+}
+
+.hero-grid.is-mounted .hero-slide-right {
+  transform: translateX(0);
+}
+
+/* Typing cursor */
+.typing-text {
+  display: inline;
+}
+
+.typing-cursor {
+  display: inline-block;
+  color: var(--primary);
+  font-weight: 400;
+  margin-left: 1px;
+  animation: cursorBlink 0.9s step-end infinite;
+  opacity: 1;
+}
+
+.typing-cursor.done {
+  animation: cursorFade 0.6s ease-out forwards;
+}
+
+@keyframes cursorBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+@keyframes cursorFade {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* Role cycling transition */
+.role-cycler {
+  display: inline-block;
+  transition:
+    opacity 0.3s ease-out,
+    transform 0.3s ease-out;
+  white-space: nowrap;
+}
+
+/* Role pill: hidden until typing completes */
+.hero-role-pill.hero-animate {
+  opacity: 0;
+  transform: translateY(16px);
+}
+
+.hero-role-pill.hero-animate.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 /* ========== SCROLL INDICATOR ========== */
 .scroll-indicator {
   position: absolute;
@@ -435,6 +510,23 @@
 
 /* ========== REDUCED MOTION ========== */
 @media (prefers-reduced-motion: reduce) {
+  .hero-animate,
+  .hero-slide-right,
+  .social-card {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+    animation: none !important;
+  }
+
+  .typing-cursor {
+    display: none;
+  }
+
+  .role-cycler {
+    transition: none;
+  }
+
   .badge-dot,
   .open-dot,
   .scroll-indicator svg {

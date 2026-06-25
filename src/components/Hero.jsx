@@ -1,8 +1,62 @@
-import { motion } from 'framer-motion'
+import { useState, useEffect } from 'react'
 import { Github, Linkedin, Mail, Instagram, ChevronDown, Download, Briefcase } from 'lucide-react'
 import '../styles/components/hero.css'
 
+const FULL_NAME = 'Muhammad Fariz Setiawan'
+
+const ROLES = [
+  'Full Stack Developer',
+  'Backend Enthusiast',
+  'React Developer',
+  'Laravel Developer',
+]
+
+const TYPING_SPEED = 80 // ms per character
+const ROLE_INTERVAL = 2500 // ms between role switches
+
 export default function Hero() {
+  // Entrance trigger — fires after first paint so CSS transitions run
+  const [mounted, setMounted] = useState(false)
+
+  // Typing effect state
+  const [charIndex, setCharIndex] = useState(0)
+  const isTypingComplete = charIndex >= FULL_NAME.length
+
+  // Role cycling state
+  const [roleIndex, setRoleIndex] = useState(0)
+  const [roleVisible, setRoleVisible] = useState(true)
+
+  // Entrance: trigger CSS animations on next paint
+  useEffect(() => {
+    const raf = requestAnimationFrame(() => {
+      setMounted(true)
+    })
+    return () => cancelAnimationFrame(raf)
+  }, [])
+
+  // Typing effect: reveal one character at a time
+  useEffect(() => {
+    if (charIndex >= FULL_NAME.length) return
+    const timer = setTimeout(() => {
+      setCharIndex((prev) => prev + 1)
+    }, TYPING_SPEED)
+    return () => clearTimeout(timer)
+  }, [charIndex])
+
+  // Role cycling: fade out → swap → fade in every 2.5s
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      // Fade out
+      setRoleVisible(false)
+      setTimeout(() => {
+        // Swap and fade in
+        setRoleIndex((prev) => (prev + 1) % ROLES.length)
+        setRoleVisible(true)
+      }, 350)
+    }, ROLE_INTERVAL)
+    return () => clearTimeout(timer)
+  }, [roleIndex])
+
   const socialLinks = [
     {
       icon: <Github size={18} strokeWidth={1.5} />,
@@ -36,69 +90,62 @@ export default function Hero() {
     { value: '100%', label: 'Passionate' },
   ]
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { staggerChildren: 0.08, delayChildren: 0.1 },
-    },
-  }
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 15 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.4, ease: 'easeOut' },
-    },
-  }
+  // Assemble visible portion of the name
+  const displayName = FULL_NAME.slice(0, charIndex)
 
   return (
     <section id="home" className="hero">
       <div className="container">
-        <motion.div
-          className="hero-grid"
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-        >
+        <div className={`hero-grid ${mounted ? 'is-mounted' : ''}`}>
+
           {/* ===== LEFT COLUMN ===== */}
           <div className="hero-left">
-            {/* Badge */}
-            <motion.div variants={itemVariants} className="hero-badge">
+
+            {/* Badge — delay 0ms */}
+            <div className="hero-badge hero-animate" style={{ '--delay': '0ms' }}>
               <span className="badge-dot" />
               <span>Available for opportunities</span>
-            </motion.div>
+            </div>
 
-            {/* Label */}
-            <motion.p variants={itemVariants} className="hero-label">
+            {/* Label — delay 100ms */}
+            <p className="hero-label hero-animate" style={{ '--delay': '100ms' }}>
               SOFTWARE ENGINEERING STUDENT
-            </motion.p>
+            </p>
 
-            {/* Name */}
-            <motion.h1 variants={itemVariants} className="hero-title">
-              Muhammad Fariz Setiawan
-            </motion.h1>
+            {/* Name — typed character by character */}
+            <h1 className="hero-title hero-animate" style={{ '--delay': '200ms' }}>
+              <span className="typing-text">
+                {displayName}
+                <span className={`typing-cursor ${isTypingComplete ? 'done' : ''}`}>|</span>
+              </span>
+            </h1>
 
-            {/* Role Pill */}
-            <motion.div variants={itemVariants} className="hero-role-pill">
-              &lt;/&gt; Full Stack Developer &middot; Backend Enthusiast
-            </motion.div>
+            {/* Role Pill — appears after typing finishes */}
+            <div className={`hero-role-pill hero-animate ${isTypingComplete ? 'is-visible' : ''}`} style={{ '--delay': '0ms' }}>
+              <span className="role-prefix">&lt;/&gt;&nbsp;</span>
+              <span
+                className="role-cycler"
+                style={{ opacity: roleVisible ? 1 : 0, transform: roleVisible ? 'translateY(0)' : 'translateY(-6px)' }}
+              >
+                {ROLES[roleIndex]}
+              </span>
+            </div>
 
-            {/* Social Grid Label */}
-            <motion.p variants={itemVariants} className="hero-social-label">
+            {/* Social Grid Label — delay after role */}
+            <p className="hero-social-label hero-animate" style={{ '--delay': '2500ms' }}>
               CONNECT WITH ME
-            </motion.p>
+            </p>
 
-            {/* Social Grid */}
-            <motion.div variants={itemVariants} className="hero-social-grid">
+            {/* Social Grid — staggered per card */}
+            <div className="hero-social-grid">
               {socialLinks.map((link, index) => (
                 <a
                   key={index}
                   href={link.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="social-card"
+                  className={`social-card hero-animate ${mounted ? 'is-mounted' : ''}`}
+                  style={{ '--delay': `${2600 + index * 80}ms` }}
                   aria-label={link.label}
                 >
                   <span className="social-card-icon">{link.icon}</span>
@@ -106,10 +153,10 @@ export default function Hero() {
                   <span className="social-card-handle">{link.handle}</span>
                 </a>
               ))}
-            </motion.div>
+            </div>
 
             {/* CTA Buttons */}
-            <motion.div variants={itemVariants} className="hero-actions">
+            <div className="hero-actions hero-animate" style={{ '--delay': '3000ms' }}>
               <a
                 href="#projects"
                 className="btn btn-primary"
@@ -125,13 +172,15 @@ export default function Hero() {
                 <Download size={16} strokeWidth={1.5} />
                 Download CV
               </a>
-            </motion.div>
+            </div>
           </div>
 
           {/* ===== RIGHT COLUMN ===== */}
           <div className="hero-right">
-            {/* Profile Card */}
-            <motion.div variants={itemVariants} className="profile-card">
+
+            {/* Profile Card — fade in from right, delay 200ms */}
+            <div className="profile-card hero-animate hero-slide-right" style={{ '--delay': '200ms' }}>
+
               {/* Avatar */}
               <div className="profile-avatar">
                 <span>MFS</span>
@@ -180,31 +229,26 @@ export default function Hero() {
                   <span className="profile-info-val">Active</span>
                 </div>
               </div>
-            </motion.div>
+            </div>
 
             {/* Stats Row */}
-            <motion.div variants={itemVariants} className="hero-stats">
+            <div className="hero-stats">
               {stats.map((stat, index) => (
                 <div key={index} className="stat-item">
                   <span className="stat-value">{stat.value}</span>
                   <span className="stat-label">{stat.label}</span>
                 </div>
               ))}
-            </motion.div>
+            </div>
           </div>
-        </motion.div>
+        </div>
       </div>
 
       {/* Scroll Indicator */}
-      <motion.div
-        className="scroll-indicator"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.8 }}
-      >
+      <div className="scroll-indicator">
         <span>Scroll</span>
         <ChevronDown size={16} strokeWidth={1.5} />
-      </motion.div>
+      </div>
     </section>
   )
 }

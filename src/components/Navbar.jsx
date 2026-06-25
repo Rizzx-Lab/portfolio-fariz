@@ -55,8 +55,7 @@ export default function Navbar() {
             className="navbar-logo"
             onClick={(e) => { e.preventDefault(); handleNavClick('home') }}
           >
-            <span className="logo-text">Fariz</span>
-            <span className="logo-accent">.</span>
+            <img src="/images/fz.png" alt="Fariz Logo" className="logo-img" />
           </a>
 
           <div className="navbar-menu">
