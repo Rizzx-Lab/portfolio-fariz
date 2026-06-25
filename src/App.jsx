@@ -2,8 +2,10 @@ import { Suspense, lazy, useState, useEffect } from 'react'
 import { motion, useScroll, useSpring } from 'framer-motion'
 import Hero from './components/Hero'
 import PillNav from './components/PillNav'
+import Dock from './components/Dock'
 import ArcRevealHero from './components/ArcRevealHero'
 import { useScrollReveal } from './hooks/useScrollReveal'
+import { VscHome, VscArchive, VscAccount, VscSettingsGear } from 'react-icons/vsc'
 import './App.css'
 
 // Lazy-load sections below the fold
@@ -104,6 +106,20 @@ function App() {
             </div>
           </div>
         </footer>
+
+        <div className="mobile-dock">
+          <Dock
+            items={[
+              { icon: <VscHome size={18} />, label: 'Home', onClick: () => { document.getElementById('home')?.scrollIntoView({ behavior: 'smooth' }); } },
+              { icon: <VscArchive size={18} />, label: 'Projects', onClick: () => { document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' }); } },
+              { icon: <VscAccount size={18} />, label: 'About', onClick: () => { document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' }); } },
+              { icon: <VscSettingsGear size={18} />, label: 'Contact', onClick: () => { document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' }); } },
+            ]}
+            panelHeight={68}
+            baseItemSize={50}
+            magnification={70}
+          />
+        </div>
       </div>
     </ArcRevealHero>
   )

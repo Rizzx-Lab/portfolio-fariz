@@ -103,3 +103,23 @@ section:first-of-type {
     gap: var(--space-2);
   }
 }
+
+/* ========== PILLNAV DESKTOP ONLY ========== */
+.pill-nav-container {
+  display: flex;
+}
+@media (max-width: 768px) {
+  .pill-nav-container {
+    display: none !important;
+  }
+}
+
+/* ========== DOCK MOBILE ONLY ========== */
+.mobile-dock {
+  display: none;
+}
+@media (max-width: 768px) {
+  .mobile-dock {
+    display: block;
+  }
+}
