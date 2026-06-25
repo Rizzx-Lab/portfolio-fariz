@@ -140,11 +140,23 @@ export default function Projects() {
   }
 
   const cardVariants = {
-    hidden: { opacity: 0, y: 24 },
+    hidden: { opacity: 0, y: 30 },
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.4, ease: 'easeOut' }
+      transition: {
+        duration: 0.5,
+        ease: [0.25, 0.46, 0.45, 0.94],
+      }
+    }
+  }
+
+  const techPillVariants = {
+    hidden: { opacity: 0, scale: 0.9 },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      transition: { duration: 0.3 }
     }
   }
 
@@ -175,25 +187,31 @@ export default function Projects() {
           className="filter-tabs"
         >
           <div className="filter-buttons">
-            <button
+            <motion.button
               onClick={() => setActiveCategory('all')}
               className={`filter-btn ${activeCategory === 'all' ? 'active' : ''}`}
+              whileHover={{ scale: 1.05, y: -2 }}
+              whileTap={{ scale: 0.95 }}
+              transition={{ type: 'spring', stiffness: 400, damping: 25 }}
             >
               <span className="filter-label">All</span>
               <span className="filter-count">{getCategoryCount('all')}</span>
-            </button>
+            </motion.button>
             {CATEGORIES.map((cat) => {
               const Icon = cat.icon
               return (
-                <button
+                <motion.button
                   key={cat.id}
                   onClick={() => setActiveCategory(cat.id)}
                   className={`filter-btn ${activeCategory === cat.id ? 'active' : ''}`}
+                  whileHover={{ scale: 1.05, y: -2 }}
+                  whileTap={{ scale: 0.95 }}
+                  transition={{ type: 'spring', stiffness: 400, damping: 25 }}
                 >
                   <Icon size={14} strokeWidth={1.5} />
                   <span className="filter-label">{cat.label}</span>
                   <span className="filter-count">{getCategoryCount(cat.id)}</span>
-                </button>
+                </motion.button>
               )
             })}
           </div>
@@ -216,16 +234,31 @@ export default function Projects() {
                   key={project.id}
                   variants={cardVariants}
                   className="project-card"
+                  whileHover={{ y: -6 }}
+                  whileTap={{ scale: 0.99 }}
+                  transition={{ type: 'spring', stiffness: 300, damping: 20 }}
                 >
                   {/* Badge Row */}
-                  <div className="card-badges">
-                    <span className={`project-type-badge ${project.isRealProject ? 'real' : 'practice'}`}>
+                  <motion.div
+                    className="card-badges"
+                    whileHover={{ x: 2 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <motion.span
+                      className={`project-type-badge ${project.isRealProject ? 'real' : 'practice'}`}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
                       {project.isRealProject ? 'Real Project' : 'Practice'}
-                    </span>
-                    <span className={`project-status-badge ${statusBadge.class}`}>
+                    </motion.span>
+                    <motion.span
+                      className={`project-status-badge ${statusBadge.class}`}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
                       {statusBadge.label}
-                    </span>
-                  </div>
+                    </motion.span>
+                  </motion.div>
 
                   {/* Project Title */}
                   <h3 className="card-title">{project.title}</h3>
@@ -234,11 +267,26 @@ export default function Projects() {
                   <p className="card-tagline">{project.tagline}</p>
 
                   {/* Tech Stack Pills */}
-                  <div className="card-tech">
+                  <motion.div
+                    className="card-tech"
+                    variants={containerVariants}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, margin: "-50px" }}
+                  >
                     {project.techStack.map((tech, idx) => (
-                      <span key={idx} className="tech-pill">{tech}</span>
+                      <motion.span
+                        key={idx}
+                        className="tech-pill"
+                        variants={techPillVariants}
+                        custom={idx}
+                        whileHover={{ y: -2, scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                      >
+                        {tech}
+                      </motion.span>
                     ))}
-                  </div>
+                  </motion.div>
 
                   {/* Key Features Checklist */}
                   <ul className="card-features">
@@ -253,26 +301,30 @@ export default function Projects() {
                   {/* CTA Buttons */}
                   <div className="card-actions">
                     {project.links.demo && (
-                      <a
+                      <motion.a
                         href={project.links.demo}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="cta-button primary"
+                        whileHover={{ scale: 1.02, y: -2 }}
+                        whileTap={{ scale: 0.98 }}
                       >
                         {project.category === 'mobile' ? 'Download APK' : 'Live Demo'}
                         <ExternalLink size={14} />
-                      </a>
+                      </motion.a>
                     )}
                     {project.links.code && (
-                      <a
+                      <motion.a
                         href={project.links.code}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="cta-button secondary"
+                        whileHover={{ scale: 1.02, y: -2 }}
+                        whileTap={{ scale: 0.98 }}
                       >
                         View Code
                         <ExternalLink size={14} />
-                      </a>
+                      </motion.a>
                     )}
                   </div>
                 </motion.div>
