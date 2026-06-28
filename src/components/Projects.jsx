@@ -65,7 +65,7 @@ const projects = [
     ],
     techStack: ["React", "Vite", "Axios", "Leaflet", "OpenWeather API"],
     links: {
-      demo: "https://weather-dashboard-chi-ashy.vercel.app/",
+      demo: "weather.rizzx.my.id",
       code: "https://github.com/Rizzx-Lab/weather-dashboard"
     }
   },
