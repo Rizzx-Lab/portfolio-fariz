@@ -1,0 +1,50 @@
+/* ============================================================
+   ArcRevealHero — Arc clip preloader/intro animation
+   ============================================================ */
+
+.arc-reveal-wrapper {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* Main content starts hidden beneath intro */
+.arc-reveal-content {
+  opacity: 0;
+  transform: scale(1.02);
+  transition: none;
+}
+
+.arc-reveal-content.is-revealing {
+  opacity: 1;
+  transform: scale(1);
+  transition:
+    opacity var(--reveal-duration, 1200ms) linear,
+    transform var(--reveal-duration, 1200ms) cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+/* Intro overlay */
+.arc-reveal-intro {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+/* Greeting text */
+.arc-reveal-greeting {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.arc-reveal-text {
+  font-size: clamp(2rem, 6vw, 4rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  display: block;
+  text-align: center;
+}

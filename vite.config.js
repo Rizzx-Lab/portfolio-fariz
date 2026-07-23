@@ -21,17 +21,19 @@ export default defineConfig({
         manualChunks: (id) => {
           // Separate vendor chunks
           if (id.includes('node_modules')) {
-            // framer-motion is large, separate it
-            if (id.includes('framer-motion')) {
-              return 'framer-motion'
+            // Group React and framer-motion together to prevent circular dependency
+            // framer-motion internally uses React.createContext, so they must be in the same chunk
+            if (
+              id.includes('react') ||
+              id.includes('react-dom') ||
+              id.includes('framer-motion') ||
+              id.includes('/motion/')
+            ) {
+              return 'vendor'
             }
             // lucide-react icons, separate for caching
             if (id.includes('lucide-react')) {
               return 'lucide-react'
-            }
-            // React core
-            if (id.includes('react') || id.includes('react-dom')) {
-              return 'react-vendor'
             }
           }
           return null

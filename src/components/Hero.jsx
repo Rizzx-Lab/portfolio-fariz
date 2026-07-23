@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'
+import { motion } from 'motion/react'
 import { Github, Linkedin, Mail, Instagram, ChevronDown, Download, Briefcase } from 'lucide-react'
+import TiltedCard from './TiltedCard'
 import '../styles/components/hero.css'
 
 const FULL_NAME = 'Muhammad Fariz Setiawan'
@@ -13,6 +15,42 @@ const ROLES = [
 
 const TYPING_SPEED = 80 // ms per character
 const ROLE_INTERVAL = 2500 // ms between role switches
+
+// Animation variants for motion
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.2,
+    },
+  },
+}
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.5,
+      ease: [0.25, 0.46, 0.45, 0.94],
+    },
+  },
+}
+
+const slideInRight = {
+  hidden: { opacity: 0, x: 40 },
+  visible: {
+    opacity: 1,
+    x: 0,
+    transition: {
+      duration: 0.6,
+      ease: [0.25, 0.46, 0.45, 0.94],
+    },
+  },
+}
 
 export default function Hero() {
   // Entrance trigger — fires after first paint so CSS transitions run
@@ -96,32 +134,49 @@ export default function Hero() {
   return (
     <section id="home" className="hero">
       <div className="container">
-        <div className={`hero-grid ${mounted ? 'is-mounted' : ''}`}>
+        <motion.div
+          className="hero-grid"
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+        >
 
           {/* ===== LEFT COLUMN ===== */}
-          <div className="hero-left">
+          <motion.div className="hero-left" variants={containerVariants}>
 
             {/* Badge — delay 0ms */}
-            <div className="hero-badge hero-animate" style={{ '--delay': '0ms' }}>
+            <motion.div
+              className="hero-badge"
+              variants={itemVariants}
+            >
               <span className="badge-dot" />
               <span>Available for opportunities</span>
-            </div>
+            </motion.div>
 
             {/* Label — delay 100ms */}
-            <p className="hero-label hero-animate" style={{ '--delay': '100ms' }}>
+            <motion.p
+              className="hero-label"
+              variants={itemVariants}
+            >
               SOFTWARE ENGINEERING STUDENT
-            </p>
+            </motion.p>
 
             {/* Name — typed character by character */}
-            <h1 className="hero-title hero-animate" style={{ '--delay': '200ms' }}>
+            <motion.h1
+              className="hero-title"
+              variants={itemVariants}
+            >
               <span className="typing-text">
                 {displayName}
                 <span className={`typing-cursor ${isTypingComplete ? 'done' : ''}`}>|</span>
               </span>
-            </h1>
+            </motion.h1>
 
             {/* Role Pill — appears after typing finishes */}
-            <div className={`hero-role-pill hero-animate ${isTypingComplete ? 'is-visible' : ''}`} style={{ '--delay': '0ms' }}>
+            <motion.div
+              className={`hero-role-pill ${isTypingComplete ? 'is-visible' : ''}`}
+              variants={itemVariants}
+            >
               <span className="role-prefix">&lt;/&gt;&nbsp;</span>
               <span
                 className="role-cycler"
@@ -129,61 +184,94 @@ export default function Hero() {
               >
                 {ROLES[roleIndex]}
               </span>
-            </div>
+            </motion.div>
 
             {/* Social Grid Label — delay after role */}
-            <p className="hero-social-label hero-animate" style={{ '--delay': '2500ms' }}>
+            <motion.p
+              className="hero-social-label"
+              variants={itemVariants}
+            >
               CONNECT WITH ME
-            </p>
+            </motion.p>
 
             {/* Social Grid — staggered per card */}
-            <div className="hero-social-grid">
+            <motion.div className="hero-social-grid" variants={containerVariants}>
               {socialLinks.map((link, index) => (
-                <a
+                <motion.a
                   key={index}
                   href={link.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`social-card hero-animate ${mounted ? 'is-mounted' : ''}`}
-                  style={{ '--delay': `${2600 + index * 80}ms` }}
+                  className="social-card"
+                  variants={itemVariants}
+                  custom={index}
                   aria-label={link.label}
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.98 }}
                 >
                   <span className="social-card-icon">{link.icon}</span>
                   <span className="social-card-name">{link.label}</span>
                   <span className="social-card-handle">{link.handle}</span>
-                </a>
+                </motion.a>
               ))}
-            </div>
+            </motion.div>
 
             {/* CTA Buttons */}
-            <div className="hero-actions hero-animate" style={{ '--delay': '3000ms' }}>
-              <a
+            <motion.div
+              className="hero-actions"
+              variants={itemVariants}
+            >
+              <motion.a
                 href="#projects"
                 className="btn btn-primary"
                 onClick={(e) => {
                   e.preventDefault()
                   document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })
                 }}
+                whileHover={{ scale: 1.02, y: -2 }}
+                whileTap={{ scale: 0.98 }}
               >
                 <Briefcase size={16} strokeWidth={1.5} />
                 View My Work
-              </a>
-              <a href="/resume.pdf" className="btn btn-outline" download>
+              </motion.a>
+              <motion.a
+                href="/resume.pdf"
+                className="btn btn-outline"
+                download
+                whileHover={{ scale: 1.02, y: -2 }}
+                whileTap={{ scale: 0.98 }}
+              >
                 <Download size={16} strokeWidth={1.5} />
                 Download CV
-              </a>
-            </div>
-          </div>
+              </motion.a>
+            </motion.div>
+          </motion.div>
 
           {/* ===== RIGHT COLUMN ===== */}
-          <div className="hero-right">
+          <motion.div className="hero-right" variants={containerVariants}>
 
-            {/* Profile Card — fade in from right, delay 200ms */}
-            <div className="profile-card hero-animate hero-slide-right" style={{ '--delay': '200ms' }}>
+            {/* Profile Card — fade in from right */}
+            <motion.div
+              className="profile-card"
+              variants={slideInRight}
+            >
 
               {/* Avatar */}
               <div className="profile-avatar">
-                <span>MFS</span>
+                <TiltedCard
+                  imageSrc="/images/profile.png"
+                  altText="Muhammad Fariz Setiawan"
+                  captionText="Muhammad Fariz Setiawan"
+                  containerHeight="160px"
+                  containerWidth="160px"
+                  imageHeight="160px"
+                  imageWidth="160px"
+                  rotateAmplitude={10}
+                  scaleOnHover={1.08}
+                  showMobileWarning={false}
+                  showTooltip={false}
+                  displayOverlayContent={false}
+                />
               </div>
 
               {/* Name & Role */}
@@ -191,14 +279,22 @@ export default function Hero() {
               <p className="profile-role">&lt;/&gt; Full Stack Developer</p>
 
               {/* Open to Work */}
-              <div className="profile-open-badge">
+              <motion.div
+                className="profile-open-badge"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
                 <span className="open-dot" />
                 <span>Open to work</span>
-              </div>
+              </motion.div>
 
               {/* Info Rows */}
               <div className="profile-info">
-                <div className="profile-info-row">
+                <motion.div
+                  className="profile-info-row"
+                  whileHover={{ x: 4 }}
+                  transition={{ duration: 0.2 }}
+                >
                   <span className="profile-info-icon">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
@@ -207,8 +303,12 @@ export default function Hero() {
                   </span>
                   <span className="profile-info-key">Location</span>
                   <span className="profile-info-val">Indonesia</span>
-                </div>
-                <div className="profile-info-row">
+                </motion.div>
+                <motion.div
+                  className="profile-info-row"
+                  whileHover={{ x: 4 }}
+                  transition={{ duration: 0.2 }}
+                >
                   <span className="profile-info-icon">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                       <polyline points="16 18 22 12 16 6"/>
@@ -217,8 +317,12 @@ export default function Hero() {
                   </span>
                   <span className="profile-info-key">Focus</span>
                   <span className="profile-info-val">Backend &amp; Web Dev</span>
-                </div>
-                <div className="profile-info-row">
+                </motion.div>
+                <motion.div
+                  className="profile-info-row"
+                  whileHover={{ x: 4 }}
+                  transition={{ duration: 0.2 }}
+                >
                   <span className="profile-info-icon">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                       <circle cx="12" cy="12" r="10"/>
@@ -227,28 +331,43 @@ export default function Hero() {
                   </span>
                   <span className="profile-info-key">Status</span>
                   <span className="profile-info-val">Active</span>
-                </div>
+                </motion.div>
               </div>
-            </div>
+            </motion.div>
 
             {/* Stats Row */}
-            <div className="hero-stats">
+            <motion.div
+              className="hero-stats"
+              variants={containerVariants}
+            >
               {stats.map((stat, index) => (
-                <div key={index} className="stat-item">
+                <motion.div
+                  key={index}
+                  className="stat-item"
+                  variants={itemVariants}
+                  custom={index}
+                  whileHover={{ y: -4, borderColor: 'var(--primary)' }}
+                  whileTap={{ scale: 0.98 }}
+                >
                   <span className="stat-value">{stat.value}</span>
                   <span className="stat-label">{stat.label}</span>
-                </div>
+                </motion.div>
               ))}
-            </div>
-          </div>
-        </div>
+            </motion.div>
+          </motion.div>
+        </motion.div>
       </div>
 
       {/* Scroll Indicator */}
-      <div className="scroll-indicator">
+      <motion.div
+        className="scroll-indicator"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 1.5, duration: 0.5 }}
+      >
         <span>Scroll</span>
         <ChevronDown size={16} strokeWidth={1.5} />
-      </div>
+      </motion.div>
     </section>
   )
 }
