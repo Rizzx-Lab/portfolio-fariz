@@ -106,6 +106,25 @@ const projects = [
       demo: "https://github.com/Rizzx-Lab/weather-dashboard-flutter/releases/download/v1.0.0/app-release.apk",
       code: "https://github.com/Rizzx-Lab/weather-dashboard-flutter"
     }
+  },
+  {
+    id: 6,
+    title: "SyncTasks",
+    category: "fullstack",
+    status: "live",
+    isRealProject: true,
+    tagline: "Collaborative task & group management platform for student teams",
+    features: [
+      "Group creation with unique join codes and role-based membership",
+      "Task assignment and deadline tracking per group",
+      "Real-time messaging between group members",
+      "Ketua (leader) and anggota (member) permission levels",
+    ],
+    techStack: ["Laravel", "PHP", "MySQL", "Blade", "Tailwind CSS", "Vite"],
+    links: {
+      demo: "https://synctasks.rizzx.my.id",
+      code: "https://github.com/Rizzx-Lab/SyncTasks"
+    }
   }
 ]
 
